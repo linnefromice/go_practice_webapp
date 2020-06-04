@@ -33,10 +33,26 @@ func htmlHandler1(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func htmlHandler2(w http.ResponseWriter, r *http.Request) {
+	// テンプレートをparse
+	t := template.Must(template.ParseFiles("templates/template002.html.tpl"))
+	type SampleData struct {
+		Name string
+		Age int
+	}
+	data := SampleData{Name: "Taro", Age: 25}
+
+	// テンプレートを描画
+	if err := t.ExecuteTemplate(w, "template002.html.tpl", data); err != nil {
+		log.Fatal(err)
+	}
+}
+
 func main() {
 	log.Println("Launching...")
 	http.HandleFunc("/page0", htmlHandler0)
 	http.HandleFunc("/page1", htmlHandler1)
+	http.HandleFunc("/page2", htmlHandler2)
 
 	// サーバーを起動
 	http.ListenAndServe(":8080", nil)
