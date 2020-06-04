@@ -70,12 +70,24 @@ func htmlHandler3(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func htmlHandler4(w http.ResponseWriter, r *http.Request) {
+	// テンプレートをparse
+	t := template.Must(template.ParseFiles("templates/template004.html.tpl"))
+	strArray := []string{"aa", "bbb", "cccc", "ddddd"}
+
+	// テンプレートを描画
+	if err := t.ExecuteTemplate(w, "template004.html.tpl", strArray); err != nil {
+		log.Fatal(err)
+	}
+}
+
 func main() {
 	log.Println("Launching...")
 	http.HandleFunc("/page0", htmlHandler0)
 	http.HandleFunc("/page1", htmlHandler1)
 	http.HandleFunc("/page2", htmlHandler2)
 	http.HandleFunc("/page3", htmlHandler3)
+	http.HandleFunc("/page4", htmlHandler4)
 
 	// サーバーを起動
 	http.ListenAndServe(":8080", nil)
