@@ -81,6 +81,26 @@ func htmlHandler4(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func htmlHandler5(w http.ResponseWriter, r *http.Request) {
+	funcMap := template.FuncMap{
+		"safehtml": func(text string) template.HTML { return template.HTML(text) },
+	}
+	// テンプレートをparse
+	t := template.Must(template.New("T").Funcs(funcMap).ParseFiles("templates/template005.html.tpl"))
+	st := struct {
+		Param1 string
+		Param2 string
+	}{
+		Param1: r.FormValue("param1"),
+		Param2: r.FormValue("param2"),
+	}
+
+	// テンプレートを描画
+	if err := t.ExecuteTemplate(w, "template005.html.tpl", st); err != nil {
+		log.Fatal(err)
+	}
+}
+
 func main() {
 	log.Println("Launching...")
 	http.HandleFunc("/page0", htmlHandler0)
@@ -88,6 +108,7 @@ func main() {
 	http.HandleFunc("/page2", htmlHandler2)
 	http.HandleFunc("/page3", htmlHandler3)
 	http.HandleFunc("/page4", htmlHandler4)
+	http.HandleFunc("/page5", htmlHandler5)
 
 	// サーバーを起動
 	http.ListenAndServe(":8080", nil)
