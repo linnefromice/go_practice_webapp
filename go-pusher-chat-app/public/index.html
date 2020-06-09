@@ -33,7 +33,28 @@
                     </form>
                 </div>
             </main>
+
+            <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3" style="display: none;" id="main">
+                <h1>Chats</h1>
+                <p><- Select a chat to load the messages</p>
+                <div class="chat" style="margin-bottom: 150px;">
+                    <h5 id="room-title"></h5>
+                    <div class="response">
+                        <form id="replyMessage">
+                            <div class="form-group">
+                                <input type="text" placeholder="Enter Message" class="form-control" name="message" />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <tbody id="chat-msgs"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
+    <!-- add scripts definition -->
 </body>
 </html>
