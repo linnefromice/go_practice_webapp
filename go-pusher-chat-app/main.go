@@ -54,5 +54,5 @@ func main()  {
 
 	http.HandleFunc("/new/user", registerNewUser)
 	http.HandleFunc("pusher/auth", pusherAuth)
-	log.Print("Running...")
+	log.Fatal(http.ListenAndServe(":8090", nil))
 }
