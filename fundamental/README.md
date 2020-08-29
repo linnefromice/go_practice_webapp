@@ -13,3 +13,7 @@ https://blog.golang.org/using-go-modules
 ## go-writing-web-application
 
 https://golang.org/doc/articles/wiki/
+
+# build-web-application-with-golang
+
+https://astaxie.gitbooks.io/build-web-application-with-golang/content/ja/
