@@ -8,13 +8,13 @@ import (
 )
 
 // redis-server --port 7079
-const PORT = 7079
+const PORT_GO_REDIS = 7079
 var ctx = context.Background()
 
 func ExampleNewClient() {
 	fmt.Println("FUNC: ExampleNewClient()")
 	rdb := redis.NewClient(&redis.Options{
-		Addr: "localhost:" + strconv.Itoa(PORT),
+		Addr: "localhost:" + strconv.Itoa(PORT_GO_REDIS),
 		Password: "",
 		DB: 0,
 	})
@@ -25,7 +25,7 @@ func ExampleNewClient() {
 func ExampleClient() {
 	fmt.Println("FUNC: ExampleClient()")
 	rdb := redis.NewClient(&redis.Options{
-		Addr: "localhost:" + strconv.Itoa(PORT),
+		Addr: "localhost:" + strconv.Itoa(PORT_GO_REDIS),
 		Password: "",
 		DB: 0,
 	})
@@ -50,7 +50,7 @@ func ExampleClient() {
 	}
 }
 
-func main() {
+func execGoRedis() {
 	fmt.Println("START: use go-redis/redis")
 	ExampleNewClient()
 	ExampleClient()
