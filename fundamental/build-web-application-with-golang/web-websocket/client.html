@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Websocket Client</title>
+</head>
+<body>
+    <script type="text/javascript">
+        let sock = null;
+        let wsuri = "ws://127.0.0.1:1234"
+
+        window.onload = () => {
+            console.log("onload")
+            sock = new WebSocket(wsuri)
+            sock.onopen = () => {
+                console.log("connected to " + wsuri)
+            }
+            sock.onclose = (e) => {
+                console.log("connection closed (" + e.code + ")")
+            }
+            sock.onmessage = (e) => {
+                console.log("message received: " + e.data)
+            }
+        };
+
+        const send = () => {
+            let msg = document.getElementById('message').value;
+            sock.send(msg);
+        }
+    </script>
+    <h1>WebSocket Echo Test</h1>
+    <form>
+        <p>
+            Message: <input id="message" type="text" value="Hello, world!">
+        </p>
+    </form>
+    <button onclick="send();">Send Message</button>
+</body>
+</html>
