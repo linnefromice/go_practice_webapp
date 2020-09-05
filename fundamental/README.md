@@ -29,3 +29,4 @@ https://qiita.com/hyo_07/items/59c093dda143325b1859
     - go build
 - ref
     - https://blog.mmmcorp.co.jp/blog/2019/10/10/go-mod/
+    - https://qiita.com/ayatothos/items/3b06855ae331689730ae
