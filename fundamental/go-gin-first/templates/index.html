@@ -8,5 +8,12 @@
 <body>
     <h1>Hello World</h1>
     <h2>{{ .request_time }}</h2>
+    <ul>
+        {{ range .todos }}
+            <li>コンテンツ: {{ .Text }}</li>
+            <li>ステータス: {{ .Status }}</li>
+            <li>作成日: {{ .CreatedAt }} / 更新日: {{ .UpdatedAt }}</li>
+        {{ end }}
+    </ul>
 </body>
 </html>
