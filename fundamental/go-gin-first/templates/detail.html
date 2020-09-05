@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First App - Gin Web Framework</title>
+</head>
+<body>
+    <h2>Detail</h2>
+    
+    <p>{{.user.ID}}</p>
+    <p>{{.user.Name}}</p>
+    <p>{{.user.Age}}</p>
+    
+    <form method="post" action="/update/{{.todo.ID}}">
+        <p>内容<input type="text" name="text" size="30" value="{{.todo.Text}}" ></p>
+        <p>状態
+            <select name="status">
+                {{if eq .todo.Status "Pending"}}
+                    <option value="Pending" selected>着手不可</option>
+                    <option value="Ready">未着手</option>
+                    <option value="Doing">着手中</option>
+                    <option value="Done">完了</option>
+                {{else if eq .todo.Status "Ready"}}
+                    <option value="Pending">着手不可</option>
+                    <option value="Ready" selected>未着手</option>
+                    <option value="Doing">着手中</option>
+                    <option value="Done">完了</option>
+                    {{else if eq .todo.Status "Doing"}}
+                    <option value="Pending">着手不可</option>
+                    <option value="Ready">未着手</option>
+                    <option value="Doing" selected>着手中</option>
+                    <option value="Done">完了</option>
+                {{else}}
+                    <option value="Pending">着手不可</option>
+                    <option value="Ready">未着手</option>
+                    <option value="Doing">着手中</option>
+                    <option value="Done" selected>完了</option>
+                {{end}}
+            </select>
+        </p>
+        <p><input type="submit" value="Send"></p>
+    </form>
+</body>
+</html>
