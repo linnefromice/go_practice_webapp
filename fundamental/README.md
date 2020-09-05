@@ -28,5 +28,6 @@ https://qiita.com/hyo_07/items/59c093dda143325b1859
     - (Write main.go -> package name)
     - go build
 - ref
+    - https://gorm.io/
     - https://blog.mmmcorp.co.jp/blog/2019/10/10/go-mod/
     - https://qiita.com/ayatothos/items/3b06855ae331689730ae
