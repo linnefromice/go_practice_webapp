@@ -39,3 +39,5 @@ https://freshman.tech/web-development-with-go/
 - commands
     - cd go-http-server-first
     - go mod init linnefromice/go-http-server-first
+- ref
+    - https://mholt.github.io/json-to-go/
