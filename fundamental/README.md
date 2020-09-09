@@ -41,3 +41,6 @@ https://freshman.tech/web-development-with-go/
     - go mod init linnefromice/go-http-server-first
 - ref
     - https://mholt.github.io/json-to-go/
+
+https://qiita.com/tenntenn/items/0e33a4959250d1a55045
+https://qiita.com/Syoitu/items/8e7e3215fb7ac9dabc3a
