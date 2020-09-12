@@ -45,15 +45,16 @@ func (c *Client) readPump() {
 		return nil
 	})
 	for {
-		_, message, err := c.conn.ReadMessage()
-		if err != nil {
+		var post *post
+		if err := c.conn.ReadJSON(&post); err == nil {
+			message := bytes.TrimSpace(bytes.Replace([]byte(post.Message), newline, space, -1))
+			c.hub.broadcast <- message
+		} else {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Printf("error: %v", err)
 			}
 			break
 		}
-		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-		c.hub.broadcast <- message
 	}
 }
 func (c *Client) writePump() {

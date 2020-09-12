@@ -5,7 +5,8 @@
 <script type="text/javascript">
 window.onload = function () {
     var conn;
-    var msg = document.getElementById("msg");
+    var message = document.getElementById("message");
+    var name = document.getElementById("name");
     var log = document.getElementById("log");
 
     function appendLog(item) {
@@ -20,11 +21,21 @@ window.onload = function () {
         if (!conn) {
             return false;
         }
-        if (!msg.value) {
+        if (!message.value) {
             return false;
         }
-        conn.send(msg.value);
-        msg.value = "";
+        if (!name.value) {
+            return false;
+        }
+        const data = JSON.stringify({
+            "name": name.value,
+            "message": message.value,
+            "time":  Date.now().toString()
+        });
+        console.log(data);
+        conn.send(data);
+
+        message.value = "";
         return false;
     };
 
@@ -73,7 +84,7 @@ body {
     top: 0.5em;
     left: 0.5em;
     right: 0.5em;
-    bottom: 3em;
+    bottom: 5em;
     overflow: auto;
 }
 
@@ -85,6 +96,11 @@ body {
     left: 0px;
     width: 100%;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    color: white;
 }
 
 </style>
@@ -92,8 +108,13 @@ body {
 <body>
 <div id="log"></div>
 <form id="form">
-    <input type="submit" value="Send" />
-    <input type="text" id="msg" size="64" autofocus />
+    <div>
+        <input type="submit" value="Send" />
+        Name <input type="text" id="name" size="32" autofocus />
+    </div>
+    <div>
+        Message <input type="text" id="message" size="64" autofocus />
+    </div>
 </form>
 </body>
 </html>
