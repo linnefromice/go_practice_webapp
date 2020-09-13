@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bytes"
+	// "bytes"
 	"log"
 	"net/http"
 	"time"
@@ -31,7 +31,7 @@ var upgrader = websocket.Upgrader{
 type Client struct {
 	hub *Hub
 	conn *websocket.Conn
-	send chan []byte
+	send chan *Post
 }
 func (c *Client) readPump() {
 	defer func() {
@@ -45,10 +45,12 @@ func (c *Client) readPump() {
 		return nil
 	})
 	for {
-		var post *post
+		var post *Post
 		if err := c.conn.ReadJSON(&post); err == nil {
-			message := bytes.TrimSpace(bytes.Replace([]byte(post.Message), newline, space, -1))
-			c.hub.broadcast <- message
+			t := time.Now()
+			layout := "2006-01-02 15:04:05"
+			post.Time = t.Format(layout)
+			c.hub.broadcast <- post
 		} else {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Printf("error: %v", err)
@@ -65,24 +67,14 @@ func (c *Client) writePump() {
 	}()
 	for {
 		select {
-		case message, ok := <-c.send:
+		case post, ok := <-c.send:
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if !ok {
 				c.conn.WriteMessage(websocket.CloseMessage, []byte{})
 				return
 			}
-			w, err := c.conn.NextWriter(websocket.TextMessage)
-			if err != nil {
-				return
-			}
-			w.Write(message)
-			n := len(c.send)
-			for i := 0; i < n; i++ {
-				w.Write(newline)
-				w.Write(<-c.send)
-			}
-			if err := w.Close(); err != nil {
-				return
+			if err := c.conn.WriteJSON(post); err != nil {
+				c.conn.Close()
 			}
 		case <- ticker.C:
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
@@ -92,13 +84,23 @@ func (c *Client) writePump() {
 		}
 	}
 }
+
+func buildClient(hub *Hub, conn *websocket.Conn) *Client {
+	log.Println("Client生成")
+	return &Client{
+		hub: hub,
+		conn: conn,
+		send: make(chan *Post),
+	}
+}
+
 func serveWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
+	client := buildClient(hub, conn)
 	client.hub.register <- client
 	go client.writePump()
 	go client.readPump()

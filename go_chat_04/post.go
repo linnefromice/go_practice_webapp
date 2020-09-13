@@ -1,7 +1,7 @@
 package main
 
 // Post 投稿
-type post struct {
+type Post struct {
 	Name     string `json:"name"`
 	Message  string `json:"message"`
 	Time     string `json:"time"`
