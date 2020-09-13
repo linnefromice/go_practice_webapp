@@ -47,6 +47,9 @@ func (c *Client) readPump() {
 	for {
 		var post *Post
 		if err := c.conn.ReadJSON(&post); err == nil {
+			t := time.Now()
+			layout := "2006-01-02 15:04:05"
+			post.Time = t.Format(layout)
 			c.hub.broadcast <- post
 		} else {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {

@@ -30,7 +30,6 @@ window.onload = function () {
         const data = JSON.stringify({
             "name": name.value,
             "message": message.value,
-            "time":  Date.now().toString()
         });
         console.log(data);
         conn.send(data);
