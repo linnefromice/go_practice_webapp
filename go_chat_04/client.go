@@ -47,7 +47,6 @@ func (c *Client) readPump() {
 	for {
 		var post *Post
 		if err := c.conn.ReadJSON(&post); err == nil {
-			// post.Message = bytes.TrimSpace(bytes.Replace([]byte(post.Message), newline, space, -1))
 			c.hub.broadcast <- post
 		} else {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
@@ -72,10 +71,7 @@ func (c *Client) writePump() {
 				return
 			}
 			if err := c.conn.WriteJSON(post); err != nil {
-				// 送信に失敗したらコネクションを閉じる(暫定)
-				if err := c.conn.Close(); err != nil {
-					return
-				}
+				c.conn.Close()
 			}
 		case <- ticker.C:
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
@@ -85,13 +81,23 @@ func (c *Client) writePump() {
 		}
 	}
 }
+
+func buildClient(hub *Hub, conn *websocket.Conn) *Client {
+	log.Println("Client生成")
+	return &Client{
+		hub: hub,
+		conn: conn,
+		send: make(chan *Post),
+	}
+}
+
 func serveWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	client := &Client{hub: hub, conn: conn, send: make(chan *Post)}
+	client := buildClient(hub, conn)
 	client.hub.register <- client
 	go client.writePump()
 	go client.readPump()
