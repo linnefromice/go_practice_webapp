@@ -48,12 +48,23 @@ window.onload = function () {
             appendLog(item);
         };
         conn.onmessage = function (evt) {
+            const json = JSON.parse(evt.data);
+            var messageArea = document.createElement("div");
+            var message = document.createElement("div");
+            message.innerText = json.message;
+            var attribute = document.createElement("div");
+            attribute.innerText = `${json.name} / ${json.time}`;
+            messageArea.appendChild(message);
+            messageArea.appendChild(attribute);
+            appendLog(messageArea);
+/*
             var messages = evt.data.split('\n');
             for (var i = 0; i < messages.length; i++) {
                 var item = document.createElement("div");
                 item.innerText = messages[i];
                 appendLog(item);
             }
+*/
         };
     } else {
         var item = document.createElement("div");
