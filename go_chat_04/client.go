@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bytes"
+	// "bytes"
 	"log"
 	"net/http"
 	"time"
@@ -31,7 +31,7 @@ var upgrader = websocket.Upgrader{
 type Client struct {
 	hub *Hub
 	conn *websocket.Conn
-	send chan []byte
+	send chan *Post
 }
 func (c *Client) readPump() {
 	defer func() {
@@ -47,8 +47,8 @@ func (c *Client) readPump() {
 	for {
 		var post *Post
 		if err := c.conn.ReadJSON(&post); err == nil {
-			message := bytes.TrimSpace(bytes.Replace([]byte(post.Message), newline, space, -1))
-			c.hub.broadcast <- message
+			// post.Message = bytes.TrimSpace(bytes.Replace([]byte(post.Message), newline, space, -1))
+			c.hub.broadcast <- post
 		} else {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Printf("error: %v", err)
@@ -65,24 +65,17 @@ func (c *Client) writePump() {
 	}()
 	for {
 		select {
-		case message, ok := <-c.send:
+		case post, ok := <-c.send:
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if !ok {
 				c.conn.WriteMessage(websocket.CloseMessage, []byte{})
 				return
 			}
-			w, err := c.conn.NextWriter(websocket.TextMessage)
-			if err != nil {
-				return
-			}
-			w.Write(message)
-			n := len(c.send)
-			for i := 0; i < n; i++ {
-				w.Write(newline)
-				w.Write(<-c.send)
-			}
-			if err := w.Close(); err != nil {
-				return
+			if err := c.conn.WriteJSON(post); err != nil {
+				// 送信に失敗したらコネクションを閉じる(暫定)
+				if err := c.conn.Close(); err != nil {
+					return
+				}
 			}
 		case <- ticker.C:
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
@@ -98,7 +91,7 @@ func serveWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
+	client := &Client{hub: hub, conn: conn, send: make(chan *Post)}
 	client.hub.register <- client
 	go client.writePump()
 	go client.readPump()

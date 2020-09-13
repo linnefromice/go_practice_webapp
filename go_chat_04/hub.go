@@ -3,7 +3,7 @@ package main
 // Hub ハブ
 type Hub struct {
 	clients map[*Client]bool
-	broadcast chan []byte
+	broadcast chan *Post
 	register chan *Client // clientsにaddするためのchannel
 	unregister chan *Client // clientsから除外するためのchannel
 }
@@ -18,10 +18,10 @@ func (hub *Hub) run() {
 				delete(hub.clients, client)
 				close(client.send)
 			}
-		case message := <-hub.broadcast:
+		case post := <-hub.broadcast:
 			for client := range hub.clients {
 				select {
-				case client.send <- message:
+				case client.send <- post:
 				default:
 					close(client.send)
 					delete(hub.clients, client)
@@ -33,7 +33,7 @@ func (hub *Hub) run() {
 
 func newHub() *Hub {
 	return &Hub{
-		broadcast: make(chan []byte),
+		broadcast: make(chan *Post),
 		register: make(chan *Client),
 		unregister: make(chan *Client),
 		clients: make(map[*Client]bool),
