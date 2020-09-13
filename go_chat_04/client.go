@@ -45,7 +45,7 @@ func (c *Client) readPump() {
 		return nil
 	})
 	for {
-		var post *post
+		var post *Post
 		if err := c.conn.ReadJSON(&post); err == nil {
 			message := bytes.TrimSpace(bytes.Replace([]byte(post.Message), newline, space, -1))
 			c.hub.broadcast <- message
