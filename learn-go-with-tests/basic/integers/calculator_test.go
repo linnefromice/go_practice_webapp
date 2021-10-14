@@ -3,21 +3,24 @@ package main
 import "testing"
 
 func TestCalculator(t *testing.T) {
+	assertCorrectMessage := func(t *testing.T, got, want int) {
+		t.Helper()
+		if got != want {
+			t.Errorf("got %q want %q", got, want)
+		}
+	}
+
 	t.Run(".Add", func(t *testing.T) {
-		sum := Add(2, 2)
+		actual := Add(2, 2)
 		expected := 4
 
-		if sum != expected {
-			t.Errorf("expected '%d' but got '%d'", expected, sum)
-		}
+		assertCorrectMessage(t, actual, expected)
 	})
 
 	t.Run(".Subtract", func(t *testing.T) {
-		sum := Subtract(4, 2)
+		actual := Subtract(4, 2)
 		expected := 2
 
-		if sum != expected {
-			t.Errorf("expected '%d' but got '%d'", expected, sum)
-		}
+		assertCorrectMessage(t, actual, expected)
 	})
 }
