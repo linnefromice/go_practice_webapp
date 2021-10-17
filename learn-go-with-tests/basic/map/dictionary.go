@@ -1,5 +1,7 @@
 package main
 
-func Search(dicrionary map[string]string, word string) string {
-	return dicrionary[word]
+type Dictionary map[string]string
+
+func (d Dictionary) Search(word string) string {
+	return d[word]
 }
