@@ -11,10 +11,6 @@ type PlayerStore interface {
 	GetPlayerScore(name string) string
 }
 
-type PlayerServer struct {
-	store PlayerStore
-}
-
 func GetPlayerScore(name string) string {
 	if name == "Pepper" {
 		return "20"
@@ -25,9 +21,19 @@ func GetPlayerScore(name string) string {
 	return ""
 }
 
+type PlayerServer struct {
+	store PlayerStore
+}
+
 func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	player := strings.TrimPrefix(r.URL.Path, "/players/")
-	fmt.Fprintf(w, p.store.GetPlayerScore(player))
+	score := p.store.GetPlayerScore(player)
+
+	if score == "" {
+		w.WriteHeader((http.StatusNotFound))
+	}
+
+	fmt.Fprintf(w, score)
 }
 
 func main() {
