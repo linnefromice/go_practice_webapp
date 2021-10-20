@@ -13,6 +13,7 @@ func TestGETPlayers(t *testing.T) {
 			"Pepper": "20",
 			"Floyd":  "10",
 		},
+		nil,
 	}
 	server := &PlayerServer{&store}
 
@@ -46,13 +47,35 @@ func TestGETPlayers(t *testing.T) {
 	})
 }
 
+func TestStoreWins(t *testing.T) {
+	store := StubPlayerStore{
+		map[string]string{},
+		nil,
+	}
+	server := &PlayerServer{&store}
+
+	t.Run("it returns accepted on POST", func(t *testing.T) {
+		request, _ := http.NewRequest(http.MethodPost, "/players/Pepper", nil)
+		response := httptest.NewRecorder()
+
+		server.ServeHTTP(response, request)
+
+		assertStatus(t, response.Code, http.StatusAccepted)
+	})
+}
+
 type StubPlayerStore struct {
-	scores map[string]string
+	scores   map[string]string
+	winCalls []string
 }
 
 func (s *StubPlayerStore) GetPlayerScore(name string) string {
 	score := s.scores[name]
 	return score
+}
+
+func (s *StubPlayerStore) RecordWin(name string) {
+	s.winCalls = append(s.winCalls, name)
 }
 
 func newGetScoreRequest(name string) *http.Request {
