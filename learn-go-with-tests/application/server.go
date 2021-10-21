@@ -16,13 +16,14 @@ type PlayerServer struct {
 }
 
 func NewPlayerServer(store PlayerStore) *PlayerServer {
-	p := &PlayerServer{
-		store,
-		http.NewServeMux(),
-	}
+	p := new(PlayerServer)
+	p.store = store
 
-	p.router.Handle("/league", http.HandlerFunc(p.leagueHandler))
-	p.router.Handle("/players/", http.HandlerFunc(p.playersHandler))
+	router := http.NewServeMux()
+	router.Handle("/league", http.HandlerFunc(p.leagueHandler))
+	router.Handle("/players/", http.HandlerFunc(p.playersHandler))
+
+	p.router = router
 
 	return p
 }
