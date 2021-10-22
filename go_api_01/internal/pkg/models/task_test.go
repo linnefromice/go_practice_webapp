@@ -4,8 +4,8 @@ import "testing"
 
 func TestTask(t *testing.T) {
 	title := "title"
-	content := "content"
-	task := NewTask(title, content)
+	description := "description"
+	task := NewTask(title, description)
 
 	t.Run(".NewTask", func(t *testing.T) {
 		if task.id != 999 {
@@ -14,7 +14,7 @@ func TestTask(t *testing.T) {
 		if task.title != title {
 			t.Error("title is wrong")
 		}
-		if task.content != content {
+		if task.description != description {
 			t.Error("title is wrong")
 		}
 		if task.isFinished != false {
