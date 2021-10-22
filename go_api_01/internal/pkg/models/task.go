@@ -33,6 +33,14 @@ func NewTaskList() *TaskList {
 	}
 }
 
+func (t *TaskList) getAllTasks() []Task {
+	return t.tasks
+}
+
+func (t *TaskList) getTask(index int) Task {
+	return t.tasks[index]
+}
+
 func (t *TaskList) addTask(title string, description string) Task {
 	task := NewTask(title, description)
 	t.tasks = append(t.tasks, task)
