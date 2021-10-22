@@ -40,23 +40,23 @@ func NewTaskList() *TaskList {
 	}
 }
 
-func (t *TaskList) getAllTasks() []Task {
-	return t.tasks
+func (tl *TaskList) getAllTasks() []Task {
+	return tl.tasks
 }
 
-func (t *TaskList) getTask(index int) Task {
-	return t.tasks[index]
+func (tl *TaskList) getTask(index int) Task {
+	return tl.tasks[index]
 }
 
-func (t *TaskList) addTask(title string, description string) Task {
-	task := NewTask(title, description)
-	t.tasks = append(t.tasks, task)
-	return task
+func (tl *TaskList) addTask(title string, description string) Task {
+	t := NewTask(title, description)
+	tl.tasks = append(tl.tasks, t)
+	return t
 }
 
-func (t *TaskList) updateTask(index int, title, description string) Task {
-	task := &t.tasks[index]
-	task.title = title
-	task.description = description
-	return *task
+func (tl *TaskList) updateTask(index int, title, description string) Task {
+	t := &tl.tasks[index]
+	t.title = title
+	t.description = description
+	return *t
 }
