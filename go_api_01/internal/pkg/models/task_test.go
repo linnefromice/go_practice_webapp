@@ -3,10 +3,11 @@ package models
 import "testing"
 
 func TestTask(t *testing.T) {
+	title := "title"
+	content := "content"
+	task := NewTask(title, content)
+
 	t.Run(".NewTask", func(t *testing.T) {
-		title := "title"
-		content := "content"
-		task := NewTask(title, content)
 		if task.id != 999 {
 			t.Error("id is wrong")
 		}
