@@ -51,19 +51,21 @@ func TestTask(t *testing.T) {
 }
 
 func TestTaskList(t *testing.T) {
-	taskList := NewTaskList()
-
+	var taskList *TaskList
 	t.Run(".NewTaskList", func(t *testing.T) {
+		taskList = NewTaskList()
 		if len(taskList.tasks) != 0 {
 			t.Error("method NewTaskList is wrong (tasks length is not zero)")
 		}
 	})
 	t.Run(".getAllTasks", func(t *testing.T) {
+		taskList = NewTaskList()
 		if len(taskList.getAllTasks()) != 0 {
 			t.Error("method NewTaskList is wrong (tasks length is not zero)")
 		}
 	})
 	t.Run(".getTask / .addTask", func(t *testing.T) {
+		taskList = NewTaskList()
 		title := "title"
 		description := "description"
 
@@ -81,6 +83,7 @@ func TestTaskList(t *testing.T) {
 		}
 	})
 	t.Run(".updateTask", func(t *testing.T) {
+		taskList = NewTaskList()
 		taskList.addTask("initial title", "initial description")
 		updatedTitle := "updated title"
 		updatedDescription := "updated description"
