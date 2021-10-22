@@ -25,9 +25,6 @@ func TestTask(t *testing.T) {
 		}
 	})
 	t.Run(".finished", func(t *testing.T) {
-		title := "title"
-		content := "content"
-		task := NewTask(title, content)
 		task.finished()
 		if task.isFinished != true {
 			t.Error("isFinished is wrong")
