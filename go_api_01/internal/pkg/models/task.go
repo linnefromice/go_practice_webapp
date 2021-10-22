@@ -46,3 +46,10 @@ func (t *TaskList) addTask(title string, description string) Task {
 	t.tasks = append(t.tasks, task)
 	return task
 }
+
+func (t *TaskList) updateTask(index int, title, description string) Task {
+	task := &t.tasks[index]
+	task.title = title
+	task.description = description
+	return *task
+}

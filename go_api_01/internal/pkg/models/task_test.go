@@ -65,4 +65,18 @@ func TestTaskList(t *testing.T) {
 			t.Error("title is wrong")
 		}
 	})
+	t.Run(".updateTask", func(t *testing.T) {
+		taskList.addTask("initial title", "initial description")
+		updatedTitle := "updated title"
+		updatedDescription := "updated description"
+		index := len(taskList.getAllTasks()) - 1
+		taskList.updateTask(index, updatedTitle, updatedDescription)
+		task := taskList.getTask(index)
+		if task.title != updatedTitle {
+			t.Error("title is wrong")
+		}
+		if task.description != updatedDescription {
+			t.Error("title is wrong")
+		}
+	})
 }
