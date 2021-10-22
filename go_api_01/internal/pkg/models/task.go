@@ -17,3 +17,8 @@ func NewTask(title string, content string) Task {
 		version:    1,
 	}
 }
+
+func (t *Task) finished() {
+	t.isFinished = true
+	t.version += 1
+}

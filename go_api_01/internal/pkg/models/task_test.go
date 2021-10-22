@@ -2,7 +2,7 @@ package models
 
 import "testing"
 
-func TestNewTask(t *testing.T) {
+func TestTask(t *testing.T) {
 	t.Run(".NewTask", func(t *testing.T) {
 		title := "title"
 		content := "content"
@@ -21,6 +21,15 @@ func TestNewTask(t *testing.T) {
 		}
 		if task.version != 1 {
 			t.Error("version is wrong")
+		}
+	})
+	t.Run(".finished", func(t *testing.T) {
+		title := "title"
+		content := "content"
+		task := NewTask(title, content)
+		task.finished()
+		if task.isFinished != true {
+			t.Error("isFinished is wrong")
 		}
 	})
 }
