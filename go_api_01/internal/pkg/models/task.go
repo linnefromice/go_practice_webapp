@@ -5,6 +5,7 @@ type Task struct {
 	title       string
 	description string
 	isFinished  bool
+	isDeleted   bool
 	version     int
 }
 
@@ -14,12 +15,18 @@ func NewTask(title string, description string) Task {
 		title:       title,
 		description: description,
 		isFinished:  false,
+		isDeleted:   false,
 		version:     1,
 	}
 }
 
 func (t *Task) finished() {
 	t.isFinished = true
+	t.version += 1
+}
+
+func (t *Task) deleted() {
+	t.isDeleted = true
 	t.version += 1
 }
 

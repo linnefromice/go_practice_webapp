@@ -5,9 +5,10 @@ import "testing"
 func TestTask(t *testing.T) {
 	title := "title"
 	description := "description"
-	task := NewTask(title, description)
+	var task Task
 
 	t.Run(".NewTask", func(t *testing.T) {
+		task = NewTask(title, description)
 		if task.id != 999 {
 			t.Error("id is wrong")
 		}
@@ -25,9 +26,20 @@ func TestTask(t *testing.T) {
 		}
 	})
 	t.Run(".finished", func(t *testing.T) {
+		task = NewTask(title, description)
 		task.finished()
 		if task.isFinished != true {
 			t.Error("isFinished is wrong")
+		}
+		if task.version != 2 {
+			t.Error("version is wrong")
+		}
+	})
+	t.Run(".deleted", func(t *testing.T) {
+		task = NewTask(title, description)
+		task.deleted()
+		if task.isDeleted != true {
+			t.Error("isDeleted is wrong")
 		}
 		if task.version != 2 {
 			t.Error("version is wrong")
