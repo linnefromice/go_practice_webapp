@@ -2,24 +2,24 @@ package models
 
 import "testing"
 
-func TestNewTodo(t *testing.T) {
-	t.Run(".NewTodo", func(t *testing.T) {
+func TestNewTask(t *testing.T) {
+	t.Run(".NewTask", func(t *testing.T) {
 		title := "title"
 		content := "content"
-		todo := NewTodo(title, content)
-		if todo.id != 999 {
+		task := NewTask(title, content)
+		if task.id != 999 {
 			t.Error("id is wrong")
 		}
-		if todo.title != title {
+		if task.title != title {
 			t.Error("title is wrong")
 		}
-		if todo.content != content {
+		if task.content != content {
 			t.Error("title is wrong")
 		}
-		if todo.isFinished != false {
+		if task.isFinished != false {
 			t.Error("isFinished is wrong")
 		}
-		if todo.version != 1 {
+		if task.version != 1 {
 			t.Error("version is wrong")
 		}
 	})

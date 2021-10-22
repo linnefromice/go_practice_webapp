@@ -1,6 +1,6 @@
 package models
 
-type Todo struct {
+type Task struct {
 	id         int
 	title      string
 	content    string
@@ -8,8 +8,8 @@ type Todo struct {
 	version    int
 }
 
-func NewTodo(title string, content string) Todo {
-	return Todo{
+func NewTask(title string, content string) Task {
+	return Task{
 		id:         999,
 		title:      title,
 		content:    content,
