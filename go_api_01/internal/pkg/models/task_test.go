@@ -29,5 +29,8 @@ func TestTask(t *testing.T) {
 		if task.isFinished != true {
 			t.Error("isFinished is wrong")
 		}
+		if task.version != 2 {
+			t.Error("version is wrong")
+		}
 	})
 }
