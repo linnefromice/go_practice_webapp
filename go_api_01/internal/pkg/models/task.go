@@ -22,3 +22,19 @@ func (t *Task) finished() {
 	t.isFinished = true
 	t.version += 1
 }
+
+type TaskList struct {
+	tasks []Task
+}
+
+func NewTaskList() *TaskList {
+	return &TaskList{
+		[]Task{},
+	}
+}
+
+func (t *TaskList) addTask(title string, description string) Task {
+	task := NewTask(title, description)
+	t.tasks = append(t.tasks, task)
+	return task
+}
