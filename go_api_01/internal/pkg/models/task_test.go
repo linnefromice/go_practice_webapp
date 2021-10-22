@@ -96,5 +96,38 @@ func TestTaskList(t *testing.T) {
 		if task.description != updatedDescription {
 			t.Error("title is wrong")
 		}
+		if task.version != 2 {
+			t.Error("version is wrong")
+		}
+	})
+	t.Run(".finishTask", func(t *testing.T) {
+		taskList = NewTaskList()
+		taskList.addTask("", "")
+		index := len(taskList.getAllTasks()) - 1
+
+		taskList.finishTask(index)
+
+		task := taskList.getTask(index)
+		if task.isFinished != true {
+			t.Error("isFinished is wrong")
+		}
+		if task.version != 2 {
+			t.Error("version is wrong")
+		}
+	})
+	t.Run(".deleteTask", func(t *testing.T) {
+		taskList = NewTaskList()
+		taskList.addTask("", "")
+		index := len(taskList.getAllTasks()) - 1
+
+		taskList.deleteTask(index)
+
+		task := taskList.getTask(index)
+		if task.isDeleted != true {
+			t.Error("isDeleted is wrong")
+		}
+		if task.version != 2 {
+			t.Error("version is wrong")
+		}
 	})
 }

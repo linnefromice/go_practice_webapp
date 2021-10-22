@@ -58,5 +58,18 @@ func (tl *TaskList) updateTask(index int, title, description string) Task {
 	t := &tl.tasks[index]
 	t.title = title
 	t.description = description
+	t.version += 1
+	return *t
+}
+
+func (tl *TaskList) finishTask(index int) Task {
+	t := &tl.tasks[index]
+	t.finished()
+	return *t
+}
+
+func (tl *TaskList) deleteTask(index int) Task {
+	t := &tl.tasks[index]
+	t.deleted()
 	return *t
 }
