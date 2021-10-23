@@ -1,5 +1,9 @@
 package models
 
+import (
+	"errors"
+)
+
 type Task struct {
 	id          int
 	title       string
@@ -44,33 +48,39 @@ func (tl *TaskList) getAllTasks() []Task {
 	return tl.tasks
 }
 
-func (tl *TaskList) getTask(index int) Task {
-	return tl.tasks[index]
+func (tl *TaskList) getTask(id int) (*Task, error) {
+	for i := 0; i < len(tl.tasks); i++ {
+		if id == tl.tasks[i].id {
+			return &tl.tasks[i], nil
+		}
+	}
+
+	return &Task{}, errors.New("task is not found")
 }
 
 func (tl *TaskList) addTask(title string, description string) Task {
-	nextId := len(tl.getAllTasks()) + 1
+	nextId := tl.nextId()
 	t := NewTask(nextId, title, description)
 	tl.tasks = append(tl.tasks, t)
 	return t
 }
 
-func (tl *TaskList) updateTask(index int, title, description string) Task {
-	t := &tl.tasks[index]
+func (tl *TaskList) updateTask(id int, title, description string) Task {
+	t, _ := tl.getTask(id)
 	t.title = title
 	t.description = description
 	t.version += 1
 	return *t
 }
 
-func (tl *TaskList) finishTask(index int) Task {
-	t := &tl.tasks[index]
+func (tl *TaskList) finishTask(id int) Task {
+	t, _ := tl.getTask(id)
 	t.finished()
 	return *t
 }
 
-func (tl *TaskList) deleteTask(index int) Task {
-	t := &tl.tasks[index]
+func (tl *TaskList) deleteTask(id int) Task {
+	t, _ := tl.getTask(id)
 	t.deleted()
 	return *t
 }

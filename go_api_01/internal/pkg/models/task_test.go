@@ -75,7 +75,7 @@ func TestTaskList(t *testing.T) {
 			t.Error("method NewTaskList is wrong")
 		}
 
-		task := taskList.getTask(len(taskList.getAllTasks()) - 1)
+		task, _ := taskList.getTask(1)
 		if task.title != title {
 			t.Error("title is wrong")
 		}
@@ -88,47 +88,47 @@ func TestTaskList(t *testing.T) {
 		taskList.addTask("initial title", "initial description")
 		updatedTitle := "updated title"
 		updatedDescription := "updated description"
-		index := len(taskList.getAllTasks()) - 1
+		index := 1
 		taskList.updateTask(index, updatedTitle, updatedDescription)
-		task := taskList.getTask(index)
+		task, _ := taskList.getTask(index)
 		if task.title != updatedTitle {
-			t.Error("title is wrong")
+			t.Errorf("title is wrong : %v / %v", task.title, updatedTitle)
 		}
 		if task.description != updatedDescription {
-			t.Error("title is wrong")
+			t.Errorf("description is wrong : %v / %v", task.description, updatedDescription)
 		}
 		if task.version != 2 {
-			t.Error("version is wrong")
+			t.Errorf("version is wrong : %v", task.version)
 		}
 	})
 	t.Run(".finishTask", func(t *testing.T) {
 		taskList = NewTaskList()
 		taskList.addTask("", "")
-		index := len(taskList.getAllTasks()) - 1
+		index := 1
 
 		taskList.finishTask(index)
 
-		task := taskList.getTask(index)
+		task, _ := taskList.getTask(index)
 		if task.isFinished != true {
-			t.Error("isFinished is wrong")
+			t.Errorf("isFinished is wrong : %v", task.isFinished)
 		}
 		if task.version != 2 {
-			t.Error("version is wrong")
+			t.Errorf("version is wrong : %v", task.version)
 		}
 	})
 	t.Run(".deleteTask", func(t *testing.T) {
 		taskList = NewTaskList()
 		taskList.addTask("", "")
-		index := len(taskList.getAllTasks()) - 1
+		index := 1
 
 		taskList.deleteTask(index)
 
-		task := taskList.getTask(index)
+		task, _ := taskList.getTask(index)
 		if task.isDeleted != true {
-			t.Error("isDeleted is wrong")
+			t.Errorf("isDeleted is wrong : %v", task.isDeleted)
 		}
 		if task.version != 2 {
-			t.Error("version is wrong")
+			t.Errorf("version is wrong : %v", task.version)
 		}
 	})
 	t.Run(".nextId (first)", func(t *testing.T) {
