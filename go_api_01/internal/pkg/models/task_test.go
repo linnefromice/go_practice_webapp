@@ -3,13 +3,14 @@ package models
 import "testing"
 
 func TestTask(t *testing.T) {
+	id := 999
 	title := "title"
 	description := "description"
 	var task Task
 
 	t.Run(".NewTask", func(t *testing.T) {
-		task = NewTask(title, description)
-		if task.id != 999 {
+		task = NewTask(id, title, description)
+		if task.id != id {
 			t.Error("id is wrong")
 		}
 		if task.title != title {
@@ -29,7 +30,7 @@ func TestTask(t *testing.T) {
 		}
 	})
 	t.Run(".finished", func(t *testing.T) {
-		task = NewTask(title, description)
+		task = NewTask(id, title, description)
 		task.finished()
 		if task.isFinished != true {
 			t.Error("isFinished is wrong")
@@ -39,7 +40,7 @@ func TestTask(t *testing.T) {
 		}
 	})
 	t.Run(".deleted", func(t *testing.T) {
-		task = NewTask(title, description)
+		task = NewTask(id, title, description)
 		task.deleted()
 		if task.isDeleted != true {
 			t.Error("isDeleted is wrong")

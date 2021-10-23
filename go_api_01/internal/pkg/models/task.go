@@ -9,9 +9,9 @@ type Task struct {
 	version     int
 }
 
-func NewTask(title string, description string) Task {
+func NewTask(id int, title, description string) Task {
 	return Task{
-		id:          999,
+		id:          id,
 		title:       title,
 		description: description,
 		isFinished:  false,
@@ -49,7 +49,8 @@ func (tl *TaskList) getTask(index int) Task {
 }
 
 func (tl *TaskList) addTask(title string, description string) Task {
-	t := NewTask(title, description)
+	nextId := len(tl.getAllTasks()) + 1
+	t := NewTask(nextId, title, description)
 	tl.tasks = append(tl.tasks, t)
 	return t
 }
