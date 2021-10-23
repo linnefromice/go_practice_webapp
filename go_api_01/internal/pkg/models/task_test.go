@@ -131,4 +131,18 @@ func TestTaskList(t *testing.T) {
 			t.Error("version is wrong")
 		}
 	})
+	t.Run(".nextId (first)", func(t *testing.T) {
+		taskList = NewTaskList()
+		if taskList.nextId() != 1 {
+			t.Error("nextId is wrong")
+		}
+	})
+	t.Run(".nextId", func(t *testing.T) {
+		taskList = NewTaskList()
+		taskList.addTask("", "")
+		taskList.addTask("", "")
+		if taskList.nextId() != 3 {
+			t.Error("nextId is wrong")
+		}
+	})
 }

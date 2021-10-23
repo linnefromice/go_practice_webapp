@@ -74,3 +74,13 @@ func (tl *TaskList) deleteTask(index int) Task {
 	t.deleted()
 	return *t
 }
+
+func (tl *TaskList) nextId() int {
+	max := 0
+	for _, s := range tl.tasks {
+		if max < s.id {
+			max = s.id
+		}
+	}
+	return max + 1
+}
