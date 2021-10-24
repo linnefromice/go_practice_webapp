@@ -10,157 +10,106 @@
     }
   ],
   "paths": {
-    "/users/{userId}": {
+    "/task/{taskId}": {
       "parameters": [
         {
           "schema": {
-            "type": "integer"
+            "type": "string"
           },
-          "name": "userId",
+          "name": "taskId",
           "in": "path",
-          "required": true,
-          "description": "Id of an existing user."
+          "required": true
         }
       ],
       "get": {
-        "summary": "Get User Info by User ID",
+        "summary": "Delete Task Information",
         "tags": [],
         "responses": {
           "200": {
-            "description": "User Found",
+            "description": "Task Found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/Task"
                 },
-                "examples": {
-                  "Get User Alice Smith": {
-                    "value": {
-                      "id": 142,
-                      "firstName": "Alice",
-                      "lastName": "Smith",
-                      "email": "alice.smith@gmail.com",
-                      "dateOfBirth": "1997-10-31",
-                      "emailVerified": true,
-                      "signUpDate": "2019-08-24"
-                    }
-                  }
-                }
+                "examples": {}
               }
             }
           },
           "404": {
-            "description": "User Not Found"
+            "description": "Task Not Found"
           }
         },
-        "operationId": "get-users-userId",
-        "description": "Retrieve the information of the user with the matching user ID."
+        "operationId": "get-tasks-taskId",
+        "description": "Retrieve the information of the task with the matching task ID."
       },
       "patch": {
-        "summary": "Update User Information",
-        "operationId": "patch-users-userId",
+        "summary": "Update Task Information",
+        "operationId": "patch-tasks-taskId",
         "responses": {
           "200": {
-            "description": "User Updated",
+            "description": "Task Updated",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/Task"
                 },
-                "examples": {
-                  "Updated User Rebecca Baker": {
-                    "value": {
-                      "id": 13,
-                      "firstName": "Rebecca",
-                      "lastName": "Baker",
-                      "email": "rebecca@gmail.com",
-                      "dateOfBirth": "1985-10-02",
-                      "emailVerified": false,
-                      "createDate": "2019-08-24"
-                    }
-                  }
-                }
+                "examples": {}
               }
             }
           },
           "404": {
-            "description": "User Not Found"
+            "description": "Task Not Found"
           },
           "409": {
             "description": "Email Already Taken"
           }
         },
-        "description": "Update the information of an existing user.",
+        "description": "Update the information of an existing task.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "firstName": {
+                  "title": {
                     "type": "string"
                   },
-                  "lastName": {
-                    "type": "string"
-                  },
-                  "email": {
-                    "type": "string",
-                    "description": "If a new email is given, the user's email verified property will be set to false."
-                  },
-                  "dateOfBirth": {
+                  "description": {
                     "type": "string"
                   }
                 }
               },
-              "examples": {
-                "Update First Name": {
-                  "value": {
-                    "firstName": "Rebecca"
-                  }
-                },
-                "Update Email": {
-                  "value": {
-                    "email": "rebecca@gmail.com"
-                  }
-                },
-                "Update Last Name & Date of Birth": {
-                  "value": {
-                    "lastName": "Baker",
-                    "dateOfBirth": "1985-10-02"
-                  }
-                }
-              }
+              "examples": {}
             }
           },
-          "description": "Patch user properties to update."
+          "description": "Patch task properties to update."
         }
-      }
-    },
-    "/user": {
-      "post": {
-        "summary": "Create New User",
-        "operationId": "post-user",
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "delete-task-taskId",
         "responses": {
           "200": {
-            "description": "User Created",
+            "description": "OK"
+          }
+        },
+        "description": "Delete the information of an existing task."
+      }
+    },
+    "/task": {
+      "post": {
+        "summary": "Create New Task",
+        "operationId": "post-task",
+        "responses": {
+          "200": {
+            "description": "Task Created",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/Task"
                 },
-                "examples": {
-                  "New User Bob Fellow": {
-                    "value": {
-                      "id": 12,
-                      "firstName": "Bob",
-                      "lastName": "Fellow",
-                      "email": "bob.fellow@gmail.com",
-                      "dateOfBirth": "1996-08-24",
-                      "emailVerified": false,
-                      "createDate": "2020-11-18"
-                    }
-                  }
-                }
+                "examples": {}
               }
             }
           },
@@ -177,51 +126,30 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "firstName": {
+                  "title": {
                     "type": "string"
                   },
-                  "lastName": {
+                  "description": {
                     "type": "string"
-                  },
-                  "email": {
-                    "type": "string"
-                  },
-                  "dateOfBirth": {
-                    "type": "string",
-                    "format": "date"
-                  }
-                },
-                "required": [
-                  "firstName",
-                  "lastName",
-                  "email",
-                  "dateOfBirth"
-                ]
-              },
-              "examples": {
-                "Create User Bob Fellow": {
-                  "value": {
-                    "firstName": "Bob",
-                    "lastName": "Fellow",
-                    "email": "bob.fellow@gmail.com",
-                    "dateOfBirth": "1996-08-24"
                   }
                 }
-              }
+              },
+              "examples": {}
             }
           },
-          "description": "Post the necessary fields for the API to create a new user."
+          "description": "Post the necessary fields for the API to create a new task."
         },
-        "description": "Create a new user."
-      }
+        "description": "Create a new task."
+      },
+      "parameters": []
     }
   },
   "components": {
     "schemas": {
-      "User": {
-        "title": "User",
+      "Task": {
+        "title": "Task",
         "type": "object",
-        "description": "",
+        "description": "Task model definition",
         "examples": [
           {
             "id": 142,
@@ -236,39 +164,31 @@
         "properties": {
           "id": {
             "type": "integer",
-            "description": "Unique identifier for the given user."
+            "description": ""
           },
-          "firstName": {
+          "title": {
             "type": "string"
           },
-          "lastName": {
+          "description": {
             "type": "string"
           },
-          "email": {
-            "type": "string",
-            "format": "email"
+          "isFinished": {
+            "type": "boolean"
           },
-          "dateOfBirth": {
-            "type": "string",
-            "format": "date",
-            "example": "1997-10-31"
+          "isDeleted": {
+            "type": "boolean"
           },
-          "emailVerified": {
-            "type": "boolean",
-            "description": "Set to true if the user's email has been verified."
-          },
-          "createDate": {
-            "type": "string",
-            "format": "date",
-            "description": "The date that the user was created."
+          "version": {
+            "type": "integer"
           }
         },
         "required": [
           "id",
-          "firstName",
-          "lastName",
-          "email",
-          "emailVerified"
+          "title",
+          "description",
+          "isFinished",
+          "isDeleted",
+          "version"
         ]
       }
     }
