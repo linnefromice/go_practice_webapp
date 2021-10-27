@@ -1,9 +1,9 @@
 package openapi
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
-	"reflect"
 	"testing"
 
 	"github.com/labstack/echo/v4"
@@ -22,8 +22,14 @@ func TestGetTasksTaskId(t *testing.T) {
 	if rec.Code != http.StatusOK {
 		t.Errorf("want %d, but %d", http.StatusOK, rec.Code)
 	}
-	expected := `{"description":"Description","id":1,"isDeleted":false,"isFinished":false,"title":"Title","version":1}`
-	if reflect.DeepEqual(rec.Body.String(), expected) {
-		t.Errorf("want %s, but %s", expected, rec.Body.String())
+	var got Task
+	err := json.NewDecoder(rec.Body).Decode(&got)
+	if err != nil {
+		t.Fatal("Unable to parse response from server")
+	}
+	expected := NewDummyTask()
+
+	if got != expected {
+		t.Errorf("want %+v, but %+v", expected, got)
 	}
 }
