@@ -35,7 +35,7 @@ func TestGetTask(t *testing.T) {
 }
 func TestPostTask(t *testing.T) {
 	e := echo.New()
-	req := httptest.NewRequest(http.MethodGet, "/task", nil)
+	req := httptest.NewRequest(http.MethodPost, "/task", nil)
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
@@ -58,9 +58,9 @@ func TestPostTask(t *testing.T) {
 	}
 }
 
-func DeleteTaskTaskId(t *testing.T) {
+func TestDeleteTaskTaskId(t *testing.T) {
 	e := echo.New()
-	req := httptest.NewRequest(http.MethodGet, "/task/1", nil)
+	req := httptest.NewRequest(http.MethodDelete, "/task/1", nil)
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
@@ -108,9 +108,9 @@ func TestGetTasksTaskId(t *testing.T) {
 	}
 }
 
-func PatchTasksTaskId(t *testing.T) {
+func TestPatchTasksTaskId(t *testing.T) {
 	e := echo.New()
-	req := httptest.NewRequest(http.MethodGet, "/task/1", nil)
+	req := httptest.NewRequest(http.MethodPatch, "/task/1", nil)
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
