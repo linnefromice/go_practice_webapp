@@ -30,3 +30,4 @@ type PostTaskJSONRequestBody PostTaskJSONBody
 
 // PatchTasksTaskIdJSONRequestBody defines body for PatchTasksTaskId for application/json ContentType.
 type PatchTasksTaskIdJSONRequestBody PatchTasksTaskIdJSONBody
+

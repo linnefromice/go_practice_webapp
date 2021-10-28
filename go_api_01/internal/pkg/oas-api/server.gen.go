@@ -13,6 +13,9 @@ import (
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+
+	// (GET /task)
+	GetTask(ctx echo.Context) error
 	// Create New Task
 	// (POST /task)
 	PostTask(ctx echo.Context) error
@@ -30,6 +33,15 @@ type ServerInterface interface {
 // ServerInterfaceWrapper converts echo contexts to parameters.
 type ServerInterfaceWrapper struct {
 	Handler ServerInterface
+}
+
+// GetTask converts echo context to params.
+func (w *ServerInterfaceWrapper) GetTask(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetTask(ctx)
+	return err
 }
 
 // PostTask converts echo context to params.
@@ -117,9 +129,11 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
+	router.GET(baseURL+"/task", wrapper.GetTask)
 	router.POST(baseURL+"/task", wrapper.PostTask)
 	router.DELETE(baseURL+"/task/:taskId", wrapper.DeleteTaskTaskId)
 	router.GET(baseURL+"/task/:taskId", wrapper.GetTasksTaskId)
 	router.PATCH(baseURL+"/task/:taskId", wrapper.PatchTasksTaskId)
 
 }
+
