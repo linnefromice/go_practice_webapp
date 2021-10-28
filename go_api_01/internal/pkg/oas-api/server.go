@@ -19,6 +19,10 @@ func NewDummyTask() Task {
 	}
 }
 
+func (s OasServerImpl) GetTask(ctx echo.Context) error {
+	return ctx.JSON(http.StatusOK, NewDummyTask())
+}
+
 func (s OasServerImpl) PostTask(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, NewDummyTask())
 }
