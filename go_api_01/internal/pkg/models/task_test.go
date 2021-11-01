@@ -10,42 +10,42 @@ func TestTask(t *testing.T) {
 
 	t.Run(".NewTask", func(t *testing.T) {
 		task = NewTask(id, title, description)
-		if task.id != id {
+		if task.Id != id {
 			t.Error("id is wrong")
 		}
-		if task.title != title {
+		if task.Title != title {
 			t.Error("title is wrong")
 		}
-		if task.description != description {
+		if task.Description != description {
 			t.Error("title is wrong")
 		}
-		if task.isFinished != false {
+		if task.IsFinished != false {
 			t.Error("isFinished is wrong")
 		}
-		if task.isFinished != false {
+		if task.IsFinished != false {
 			t.Error("isFinished is wrong")
 		}
-		if task.version != 1 {
+		if task.Version != 1 {
 			t.Error("version is wrong")
 		}
 	})
 	t.Run(".finished", func(t *testing.T) {
 		task = NewTask(id, title, description)
 		task.Finished()
-		if task.isFinished != true {
+		if task.IsFinished != true {
 			t.Error("isFinished is wrong")
 		}
-		if task.version != 2 {
+		if task.Version != 2 {
 			t.Error("version is wrong")
 		}
 	})
 	t.Run(".deleted", func(t *testing.T) {
 		task = NewTask(id, title, description)
 		task.Deleted()
-		if task.isDeleted != true {
+		if task.IsDeleted != true {
 			t.Error("isDeleted is wrong")
 		}
-		if task.version != 2 {
+		if task.Version != 2 {
 			t.Error("version is wrong")
 		}
 	})
@@ -76,10 +76,10 @@ func TestTaskList(t *testing.T) {
 		}
 
 		task, _ := taskList.GetTask(1)
-		if task.title != title {
+		if task.Title != title {
 			t.Error("title is wrong")
 		}
-		if task.description != description {
+		if task.Description != description {
 			t.Error("title is wrong")
 		}
 	})
@@ -91,14 +91,14 @@ func TestTaskList(t *testing.T) {
 		index := 1
 		taskList.UpdateTask(index, updatedTitle, updatedDescription)
 		task, _ := taskList.GetTask(index)
-		if task.title != updatedTitle {
-			t.Errorf("title is wrong : %v / %v", task.title, updatedTitle)
+		if task.Title != updatedTitle {
+			t.Errorf("title is wrong : %v / %v", task.Title, updatedTitle)
 		}
-		if task.description != updatedDescription {
-			t.Errorf("description is wrong : %v / %v", task.description, updatedDescription)
+		if task.Description != updatedDescription {
+			t.Errorf("description is wrong : %v / %v", task.Description, updatedDescription)
 		}
-		if task.version != 2 {
-			t.Errorf("version is wrong : %v", task.version)
+		if task.Version != 2 {
+			t.Errorf("version is wrong : %v", task.Version)
 		}
 	})
 	t.Run(".finishTask", func(t *testing.T) {
@@ -109,11 +109,11 @@ func TestTaskList(t *testing.T) {
 		taskList.FinishTask(index)
 
 		task, _ := taskList.GetTask(index)
-		if task.isFinished != true {
-			t.Errorf("isFinished is wrong : %v", task.isFinished)
+		if task.IsFinished != true {
+			t.Errorf("isFinished is wrong : %v", task.IsFinished)
 		}
-		if task.version != 2 {
-			t.Errorf("version is wrong : %v", task.version)
+		if task.Version != 2 {
+			t.Errorf("version is wrong : %v", task.Version)
 		}
 	})
 	t.Run(".deleteTask", func(t *testing.T) {
@@ -124,11 +124,11 @@ func TestTaskList(t *testing.T) {
 		taskList.DeleteTask(index)
 
 		task, _ := taskList.GetTask(index)
-		if task.isDeleted != true {
-			t.Errorf("isDeleted is wrong : %v", task.isDeleted)
+		if task.IsDeleted != true {
+			t.Errorf("isDeleted is wrong : %v", task.IsDeleted)
 		}
-		if task.version != 2 {
-			t.Errorf("version is wrong : %v", task.version)
+		if task.Version != 2 {
+			t.Errorf("version is wrong : %v", task.Version)
 		}
 	})
 	t.Run(".nextId (first)", func(t *testing.T) {

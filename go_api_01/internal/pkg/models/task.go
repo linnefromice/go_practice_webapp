@@ -5,33 +5,33 @@ import (
 )
 
 type Task struct {
-	id          int
-	title       string
-	description string
-	isFinished  bool
-	isDeleted   bool
-	version     int
+	Id          int    `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	IsFinished  bool   `json:"isFinished"`
+	IsDeleted   bool   `json:"isDeleted"`
+	Version     int    `json:"version"`
 }
 
 func NewTask(id int, title, description string) Task {
 	return Task{
-		id:          id,
-		title:       title,
-		description: description,
-		isFinished:  false,
-		isDeleted:   false,
-		version:     1,
+		Id:          id,
+		Title:       title,
+		Description: description,
+		IsFinished:  false,
+		IsDeleted:   false,
+		Version:     1,
 	}
 }
 
 func (t *Task) Finished() {
-	t.isFinished = true
-	t.version += 1
+	t.IsFinished = true
+	t.Version += 1
 }
 
 func (t *Task) Deleted() {
-	t.isDeleted = true
-	t.version += 1
+	t.IsDeleted = true
+	t.Version += 1
 }
 
 type TaskList struct {
@@ -50,7 +50,7 @@ func (tl *TaskList) GetAllTasks() []Task {
 
 func (tl *TaskList) GetTask(id int) (*Task, error) {
 	for i := 0; i < len(tl.tasks); i++ {
-		if id == tl.tasks[i].id {
+		if id == tl.tasks[i].Id {
 			return &tl.tasks[i], nil
 		}
 	}
@@ -67,9 +67,9 @@ func (tl *TaskList) AddTask(title string, description string) Task {
 
 func (tl *TaskList) UpdateTask(id int, title, description string) Task {
 	t, _ := tl.GetTask(id)
-	t.title = title
-	t.description = description
-	t.version += 1
+	t.Title = title
+	t.Description = description
+	t.Version += 1
 	return *t
 }
 
@@ -88,8 +88,8 @@ func (tl *TaskList) DeleteTask(id int) Task {
 func (tl *TaskList) NextId() int {
 	max := 0
 	for _, s := range tl.tasks {
-		if max < s.id {
-			max = s.id
+		if max < s.Id {
+			max = s.Id
 		}
 	}
 	return max + 1
