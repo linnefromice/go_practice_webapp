@@ -31,7 +31,7 @@ func TestTask(t *testing.T) {
 	})
 	t.Run(".finished", func(t *testing.T) {
 		task = NewTask(id, title, description)
-		task.finished()
+		task.Finished()
 		if task.isFinished != true {
 			t.Error("isFinished is wrong")
 		}
@@ -41,7 +41,7 @@ func TestTask(t *testing.T) {
 	})
 	t.Run(".deleted", func(t *testing.T) {
 		task = NewTask(id, title, description)
-		task.deleted()
+		task.Deleted()
 		if task.isDeleted != true {
 			t.Error("isDeleted is wrong")
 		}
@@ -61,7 +61,7 @@ func TestTaskList(t *testing.T) {
 	})
 	t.Run(".getAllTasks", func(t *testing.T) {
 		taskList = NewTaskList()
-		if len(taskList.getAllTasks()) != 0 {
+		if len(taskList.GetAllTasks()) != 0 {
 			t.Error("method NewTaskList is wrong (tasks length is not zero)")
 		}
 	})
@@ -70,12 +70,12 @@ func TestTaskList(t *testing.T) {
 		title := "title"
 		description := "description"
 
-		taskList.addTask(title, description)
+		taskList.AddTask(title, description)
 		if len(taskList.tasks) != 1 {
 			t.Error("method NewTaskList is wrong")
 		}
 
-		task, _ := taskList.getTask(1)
+		task, _ := taskList.GetTask(1)
 		if task.title != title {
 			t.Error("title is wrong")
 		}
@@ -85,12 +85,12 @@ func TestTaskList(t *testing.T) {
 	})
 	t.Run(".updateTask", func(t *testing.T) {
 		taskList = NewTaskList()
-		taskList.addTask("initial title", "initial description")
+		taskList.AddTask("initial title", "initial description")
 		updatedTitle := "updated title"
 		updatedDescription := "updated description"
 		index := 1
-		taskList.updateTask(index, updatedTitle, updatedDescription)
-		task, _ := taskList.getTask(index)
+		taskList.UpdateTask(index, updatedTitle, updatedDescription)
+		task, _ := taskList.GetTask(index)
 		if task.title != updatedTitle {
 			t.Errorf("title is wrong : %v / %v", task.title, updatedTitle)
 		}
@@ -103,12 +103,12 @@ func TestTaskList(t *testing.T) {
 	})
 	t.Run(".finishTask", func(t *testing.T) {
 		taskList = NewTaskList()
-		taskList.addTask("", "")
+		taskList.AddTask("", "")
 		index := 1
 
-		taskList.finishTask(index)
+		taskList.FinishTask(index)
 
-		task, _ := taskList.getTask(index)
+		task, _ := taskList.GetTask(index)
 		if task.isFinished != true {
 			t.Errorf("isFinished is wrong : %v", task.isFinished)
 		}
@@ -118,12 +118,12 @@ func TestTaskList(t *testing.T) {
 	})
 	t.Run(".deleteTask", func(t *testing.T) {
 		taskList = NewTaskList()
-		taskList.addTask("", "")
+		taskList.AddTask("", "")
 		index := 1
 
-		taskList.deleteTask(index)
+		taskList.DeleteTask(index)
 
-		task, _ := taskList.getTask(index)
+		task, _ := taskList.GetTask(index)
 		if task.isDeleted != true {
 			t.Errorf("isDeleted is wrong : %v", task.isDeleted)
 		}
@@ -133,15 +133,15 @@ func TestTaskList(t *testing.T) {
 	})
 	t.Run(".nextId (first)", func(t *testing.T) {
 		taskList = NewTaskList()
-		if taskList.nextId() != 1 {
+		if taskList.NextId() != 1 {
 			t.Error("nextId is wrong")
 		}
 	})
 	t.Run(".nextId", func(t *testing.T) {
 		taskList = NewTaskList()
-		taskList.addTask("", "")
-		taskList.addTask("", "")
-		if taskList.nextId() != 3 {
+		taskList.AddTask("", "")
+		taskList.AddTask("", "")
+		if taskList.NextId() != 3 {
 			t.Error("nextId is wrong")
 		}
 	})
