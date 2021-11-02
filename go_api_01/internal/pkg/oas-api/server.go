@@ -1,7 +1,6 @@
 package openapi
 
 import (
-	"fmt"
 	models "linnefromice/go_practice_webapp/go_api_01/internal/pkg/models"
 	"net/http"
 	"strconv"
@@ -32,7 +31,6 @@ func (s OasServerImpl) GetTask(ctx echo.Context) error {
 func (s OasServerImpl) PostTask(ctx echo.Context) error {
 	reqBody := new(PostTaskJSONBody)
 	if err := ctx.Bind(reqBody); err != nil {
-		fmt.Printf(err.Error())
 		return ctx.JSON(http.StatusInternalServerError, nil)
 	}
 	task := s.TaskList.AddTask(*reqBody.Title, *reqBody.Description)

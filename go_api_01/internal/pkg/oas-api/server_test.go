@@ -66,8 +66,6 @@ func TestGetTask(t *testing.T) {
 		},
 	}
 
-	t.Log(got)
-	t.Log(expected)
 	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("want %+v, but %+v", expected, got)
 	}
