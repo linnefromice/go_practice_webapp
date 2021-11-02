@@ -4,9 +4,12 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 
 	"github.com/labstack/echo/v4"
+
+	"linnefromice/go_practice_webapp/go_api_01/internal/pkg/models"
 )
 
 func TestGetTask(t *testing.T) {
@@ -15,21 +18,56 @@ func TestGetTask(t *testing.T) {
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	h := OasServerImpl{}
+
+	taskList := models.NewTaskList()
+	taskList.AddTask("title 1", "description 1")
+	taskList.AddTask("title 2", "description 2")
+	taskList.AddTask("title 3", "description 3")
+
+	h := OasServerImpl{
+		TaskList: *taskList,
+	}
 
 	h.GetTask(c)
 
 	if rec.Code != http.StatusOK {
 		t.Errorf("want %d, but %d", http.StatusOK, rec.Code)
 	}
-	var got Task
+	var got []Task
 	err := json.NewDecoder(rec.Body).Decode(&got)
 	if err != nil {
 		t.Fatal("Unable to parse response from server")
 	}
-	expected := NewDummyTask()
+	expected := []Task{
+		{
+			Id:          1,
+			Title:       "title 1",
+			Description: "description 1",
+			IsFinished:  false,
+			IsDeleted:   false,
+			Version:     1,
+		},
+		{
+			Id:          2,
+			Title:       "title 2",
+			Description: "description 2",
+			IsFinished:  false,
+			IsDeleted:   false,
+			Version:     1,
+		},
+		{
+			Id:          3,
+			Title:       "title 3",
+			Description: "description 3",
+			IsFinished:  false,
+			IsDeleted:   false,
+			Version:     1,
+		},
+	}
 
-	if got != expected {
+	t.Log(got)
+	t.Log(expected)
+	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("want %+v, but %+v", expected, got)
 	}
 }
