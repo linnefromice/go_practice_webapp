@@ -3,6 +3,7 @@ package openapi
 import (
 	"linnefromice/go_practice_webapp/go_api_01/internal/pkg/models"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -36,7 +37,9 @@ func (s OasServerImpl) DeleteTaskTaskId(ctx echo.Context, taskId string) error {
 }
 
 func (s OasServerImpl) GetTasksTaskId(ctx echo.Context, taskId string) error {
-	return ctx.JSON(http.StatusOK, NewDummyTask())
+	id, _ := strconv.Atoi(taskId)
+	task, _ := s.TaskList.GetTask(id)
+	return ctx.JSON(http.StatusOK, task)
 }
 
 func (s OasServerImpl) PatchTasksTaskId(ctx echo.Context, taskId string) error {
