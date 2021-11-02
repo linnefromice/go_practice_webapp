@@ -1,7 +1,8 @@
 package openapi
 
 import (
-	"linnefromice/go_practice_webapp/go_api_01/internal/pkg/models"
+	"fmt"
+	models "linnefromice/go_practice_webapp/go_api_01/internal/pkg/models"
 	"net/http"
 	"strconv"
 
@@ -12,8 +13,8 @@ type OasServerImpl struct {
 	TaskList models.TaskList
 }
 
-func NewDummyTask() Task {
-	return Task{
+func NewDummyTask() models.Task {
+	return models.Task{
 		Description: "Description",
 		Id:          1,
 		IsDeleted:   false,
@@ -29,7 +30,13 @@ func (s OasServerImpl) GetTask(ctx echo.Context) error {
 }
 
 func (s OasServerImpl) PostTask(ctx echo.Context) error {
-	return ctx.JSON(http.StatusOK, NewDummyTask())
+	reqBody := new(PostTaskJSONBody)
+	if err := ctx.Bind(reqBody); err != nil {
+		fmt.Printf(err.Error())
+		return ctx.JSON(http.StatusInternalServerError, nil)
+	}
+	task := s.TaskList.AddTask(*reqBody.Title, *reqBody.Description)
+	return ctx.JSON(http.StatusOK, task)
 }
 
 func (s OasServerImpl) DeleteTaskTaskId(ctx echo.Context, taskId string) error {
