@@ -127,9 +127,17 @@ func TestGetTasksTaskId(t *testing.T) {
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	h := OasServerImpl{}
 
-	h.GetTasksTaskId(c, "1")
+	taskList := models.NewTaskList()
+	taskList.AddTask("title 1", "description 1")
+	taskList.AddTask("title 2", "description 2")
+	taskList.AddTask("title 3", "description 3")
+
+	h := OasServerImpl{
+		TaskList: *taskList,
+	}
+
+	h.GetTasksTaskId(c, "3")
 
 	if rec.Code != http.StatusOK {
 		t.Errorf("want %d, but %d", http.StatusOK, rec.Code)
@@ -139,9 +147,16 @@ func TestGetTasksTaskId(t *testing.T) {
 	if err != nil {
 		t.Fatal("Unable to parse response from server")
 	}
-	expected := NewDummyTask()
+	expected := Task{
+		Id:          3,
+		Title:       "title 3",
+		Description: "description 3",
+		IsFinished:  false,
+		IsDeleted:   false,
+		Version:     1,
+	}
 
-	if got != expected {
+	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("want %+v, but %+v", expected, got)
 	}
 }
