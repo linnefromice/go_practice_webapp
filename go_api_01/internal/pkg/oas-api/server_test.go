@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/labstack/echo/v4"
@@ -73,23 +74,40 @@ func TestGetTask(t *testing.T) {
 }
 func TestPostTask(t *testing.T) {
 	e := echo.New()
-	req := httptest.NewRequest(http.MethodPost, "/task", nil)
+
+	userJSON := `{"title":"title 4","description":"description 4"}`
+	req := httptest.NewRequest(http.MethodPost, "/task", strings.NewReader(userJSON))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	h := OasServerImpl{}
+
+	taskList := models.NewTaskList()
+	taskList.AddTask("title 1", "description 1")
+	taskList.AddTask("title 2", "description 2")
+	taskList.AddTask("title 3", "description 3")
+
+	h := OasServerImpl{
+		TaskList: *taskList,
+	}
 
 	h.PostTask(c)
 
 	if rec.Code != http.StatusOK {
 		t.Errorf("want %d, but %d", http.StatusOK, rec.Code)
 	}
-	var got Task
+	var got models.Task
 	err := json.NewDecoder(rec.Body).Decode(&got)
 	if err != nil {
 		t.Fatal("Unable to parse response from server")
 	}
-	expected := NewDummyTask()
+	expected := models.Task{
+		Id:          4,
+		Title:       "title 4",
+		Description: "description 4",
+		IsFinished:  false,
+		IsDeleted:   false,
+		Version:     1,
+	}
 
 	if got != expected {
 		t.Errorf("want %+v, but %+v", expected, got)
@@ -109,7 +127,7 @@ func TestDeleteTaskTaskId(t *testing.T) {
 	if rec.Code != http.StatusOK {
 		t.Errorf("want %d, but %d", http.StatusOK, rec.Code)
 	}
-	var got Task
+	var got models.Task
 	err := json.NewDecoder(rec.Body).Decode(&got)
 	if err != nil {
 		t.Fatal("Unable to parse response from server")
@@ -174,7 +192,7 @@ func TestPatchTasksTaskId(t *testing.T) {
 	if rec.Code != http.StatusOK {
 		t.Errorf("want %d, but %d", http.StatusOK, rec.Code)
 	}
-	var got Task
+	var got models.Task
 	err := json.NewDecoder(rec.Body).Decode(&got)
 	if err != nil {
 		t.Fatal("Unable to parse response from server")
