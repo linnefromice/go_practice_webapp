@@ -70,6 +70,7 @@ func TestGetTask(t *testing.T) {
 		t.Errorf("want %+v, but %+v", expected, got)
 	}
 }
+
 func TestPostTask(t *testing.T) {
 	e := echo.New()
 
@@ -118,9 +119,17 @@ func TestDeleteTaskTaskId(t *testing.T) {
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	h := OasServerImpl{}
 
-	h.DeleteTaskTaskId(c, "1")
+	taskList := models.NewTaskList()
+	taskList.AddTask("title 1", "description 1")
+	taskList.AddTask("title 2", "description 2")
+	taskList.AddTask("title 3", "description 3")
+
+	h := OasServerImpl{
+		TaskList: *taskList,
+	}
+
+	h.DeleteTaskTaskId(c, "2")
 
 	if rec.Code != http.StatusOK {
 		t.Errorf("want %d, but %d", http.StatusOK, rec.Code)
@@ -130,9 +139,16 @@ func TestDeleteTaskTaskId(t *testing.T) {
 	if err != nil {
 		t.Fatal("Unable to parse response from server")
 	}
-	expected := NewDummyTask()
+	expected := models.Task{
+		Id:          2,
+		Title:       "title 2",
+		Description: "description 2",
+		IsFinished:  false,
+		IsDeleted:   true,
+		Version:     2,
+	}
 
-	if got != expected {
+	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("want %+v, but %+v", expected, got)
 	}
 }
