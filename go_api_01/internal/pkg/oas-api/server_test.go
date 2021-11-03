@@ -195,13 +195,22 @@ func TestGetTasksTaskId(t *testing.T) {
 
 func TestPatchTasksTaskId(t *testing.T) {
 	e := echo.New()
-	req := httptest.NewRequest(http.MethodPatch, "/task/1", nil)
+	userJSON := `{"title":"title updated","description":"description updated"}`
+	req := httptest.NewRequest(http.MethodPost, "/task/1", strings.NewReader(userJSON))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	h := OasServerImpl{}
 
-	h.PatchTasksTaskId(c, "1")
+	taskList := models.NewTaskList()
+	taskList.AddTask("title 1", "description 1")
+	taskList.AddTask("title 2", "description 2")
+	taskList.AddTask("title 3", "description 3")
+
+	h := OasServerImpl{
+		TaskList: *taskList,
+	}
+
+	h.PatchTasksTaskId(c, "2")
 
 	if rec.Code != http.StatusOK {
 		t.Errorf("want %d, but %d", http.StatusOK, rec.Code)
@@ -211,7 +220,14 @@ func TestPatchTasksTaskId(t *testing.T) {
 	if err != nil {
 		t.Fatal("Unable to parse response from server")
 	}
-	expected := NewDummyTask()
+	expected := models.Task{
+		Id:          2,
+		Title:       "title updated",
+		Description: "description updated",
+		IsFinished:  false,
+		IsDeleted:   false,
+		Version:     2,
+	}
 
 	if got != expected {
 		t.Errorf("want %+v, but %+v", expected, got)
