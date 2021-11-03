@@ -38,7 +38,9 @@ func (s OasServerImpl) PostTask(ctx echo.Context) error {
 }
 
 func (s OasServerImpl) DeleteTaskTaskId(ctx echo.Context, taskId string) error {
-	return ctx.JSON(http.StatusOK, NewDummyTask())
+	id, _ := strconv.Atoi(taskId)
+	task := s.TaskList.DeleteTask(id)
+	return ctx.JSON(http.StatusOK, task)
 }
 
 func (s OasServerImpl) GetTasksTaskId(ctx echo.Context, taskId string) error {
@@ -47,6 +49,7 @@ func (s OasServerImpl) GetTasksTaskId(ctx echo.Context, taskId string) error {
 	return ctx.JSON(http.StatusOK, task)
 }
 
+// TODO: logic
 func (s OasServerImpl) PatchTasksTaskId(ctx echo.Context, taskId string) error {
 	return ctx.JSON(http.StatusOK, NewDummyTask())
 }
