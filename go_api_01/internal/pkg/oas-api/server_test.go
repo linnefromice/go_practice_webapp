@@ -108,7 +108,7 @@ func TestPostTask(t *testing.T) {
 		Version:     1,
 	}
 
-	if got != expected {
+	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("want %+v, but %+v", expected, got)
 	}
 }
