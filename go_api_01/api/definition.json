@@ -1,0 +1,212 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "definition",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/task/{taskId}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "taskId",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Delete Task Information",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "Task Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                },
+                "examples": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Task Not Found"
+          }
+        },
+        "operationId": "get-tasks-taskId",
+        "description": "Retrieve the information of the task with the matching task ID."
+      },
+      "patch": {
+        "summary": "Update Task Information",
+        "operationId": "patch-tasks-taskId",
+        "responses": {
+          "200": {
+            "description": "Task Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                },
+                "examples": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Task Not Found"
+          },
+          "409": {
+            "description": "Email Already Taken"
+          }
+        },
+        "description": "Update the information of an existing task.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {}
+            }
+          },
+          "description": "Patch task properties to update."
+        }
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "delete-task-taskId",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "Delete the information of an existing task."
+      }
+    },
+    "/task": {
+      "post": {
+        "summary": "Create New Task",
+        "operationId": "post-task",
+        "responses": {
+          "200": {
+            "description": "Task Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                },
+                "examples": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Missing Required Information"
+          },
+          "409": {
+            "description": "Email Already Taken"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {}
+            },
+            "application/xml": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          "description": "Post the necessary fields for the API to create a new task."
+        },
+        "description": "Create a new task."
+      },
+      "parameters": [],
+      "get": {
+        "summary": "",
+        "operationId": "get-task",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Task"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get tasks."
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Task": {
+        "title": "Task",
+        "type": "object",
+        "description": "Task model definition",
+        "examples": [],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": ""
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "isFinished": {
+            "type": "boolean"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "isFinished",
+          "isDeleted",
+          "version"
+        ]
+      }
+    }
+  }
+}
