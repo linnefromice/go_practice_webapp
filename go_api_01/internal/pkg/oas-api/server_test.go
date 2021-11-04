@@ -26,9 +26,8 @@ func TestGetTask(t *testing.T) {
 
 	h.GetTask(c)
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("want %d, but %d", http.StatusOK, rec.Code)
-	}
+	assertStatus(t, rec.Code, http.StatusOK)
+
 	var got []Task
 	err := json.NewDecoder(rec.Body).Decode(&got)
 	if err != nil {
@@ -81,9 +80,8 @@ func TestPostTask(t *testing.T) {
 
 	h.PostTask(c)
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("want %d, but %d", http.StatusOK, rec.Code)
-	}
+	assertStatus(t, rec.Code, http.StatusOK)
+
 	var got models.Task
 	err := json.NewDecoder(rec.Body).Decode(&got)
 	if err != nil {
@@ -116,9 +114,8 @@ func TestDeleteTaskTaskId(t *testing.T) {
 
 	h.DeleteTaskTaskId(c, "2")
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("want %d, but %d", http.StatusOK, rec.Code)
-	}
+	assertStatus(t, rec.Code, http.StatusOK)
+
 	var got models.Task
 	err := json.NewDecoder(rec.Body).Decode(&got)
 	if err != nil {
@@ -151,9 +148,8 @@ func TestGetTasksTaskId(t *testing.T) {
 
 	h.GetTasksTaskId(c, "3")
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("want %d, but %d", http.StatusOK, rec.Code)
-	}
+	assertStatus(t, rec.Code, http.StatusOK)
+
 	var got Task
 	err := json.NewDecoder(rec.Body).Decode(&got)
 	if err != nil {
@@ -187,9 +183,8 @@ func TestPatchTasksTaskId(t *testing.T) {
 
 	h.PatchTasksTaskId(c, "2")
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("want %d, but %d", http.StatusOK, rec.Code)
-	}
+	assertStatus(t, rec.Code, http.StatusOK)
+
 	var got models.Task
 	err := json.NewDecoder(rec.Body).Decode(&got)
 	if err != nil {
@@ -215,4 +210,11 @@ func createInitialTaskList() models.TaskList {
 	taskList.AddTask("title 2", "description 2")
 	taskList.AddTask("title 3", "description 3")
 	return *taskList
+}
+
+func assertStatus(t *testing.T, got, want int) {
+	t.Helper()
+	if got != want {
+		t.Errorf("did not get correct status, got %d, want %d", got, want)
+	}
 }
