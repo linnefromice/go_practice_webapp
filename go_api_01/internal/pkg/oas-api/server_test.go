@@ -23,11 +23,12 @@ func TestGetTask(t *testing.T) {
 	h := OasServerImpl{
 		TaskList: createInitialTaskList(),
 	}
-
 	h.GetTask(c)
 
+	// check status
 	assertStatus(t, rec.Code, http.StatusOK)
 
+	// check response
 	var got []Task
 	err := json.NewDecoder(rec.Body).Decode(&got)
 	if err != nil {
@@ -59,7 +60,6 @@ func TestGetTask(t *testing.T) {
 			Version:     1,
 		},
 	}
-
 	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("want %+v, but %+v", expected, got)
 	}
@@ -77,11 +77,12 @@ func TestPostTask(t *testing.T) {
 	h := OasServerImpl{
 		TaskList: createInitialTaskList(),
 	}
-
 	h.PostTask(c)
 
+	// check status
 	assertStatus(t, rec.Code, http.StatusOK)
 
+	// check response
 	var got models.Task
 	err := json.NewDecoder(rec.Body).Decode(&got)
 	if err != nil {
@@ -95,7 +96,6 @@ func TestPostTask(t *testing.T) {
 		IsDeleted:   false,
 		Version:     1,
 	}
-
 	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("want %+v, but %+v", expected, got)
 	}
@@ -111,11 +111,12 @@ func TestDeleteTaskTaskId(t *testing.T) {
 	h := OasServerImpl{
 		TaskList: createInitialTaskList(),
 	}
-
 	h.DeleteTaskTaskId(c, "2")
 
+	// check status
 	assertStatus(t, rec.Code, http.StatusOK)
 
+	// check response
 	var got models.Task
 	err := json.NewDecoder(rec.Body).Decode(&got)
 	if err != nil {
@@ -145,11 +146,12 @@ func TestGetTasksTaskId(t *testing.T) {
 	h := OasServerImpl{
 		TaskList: createInitialTaskList(),
 	}
-
 	h.GetTasksTaskId(c, "3")
 
+	// check status
 	assertStatus(t, rec.Code, http.StatusOK)
 
+	// check response
 	var got Task
 	err := json.NewDecoder(rec.Body).Decode(&got)
 	if err != nil {
@@ -180,11 +182,12 @@ func TestPatchTasksTaskId(t *testing.T) {
 	h := OasServerImpl{
 		TaskList: createInitialTaskList(),
 	}
-
 	h.PatchTasksTaskId(c, "2")
 
+	// check status
 	assertStatus(t, rec.Code, http.StatusOK)
 
+	// check response
 	var got models.Task
 	err := json.NewDecoder(rec.Body).Decode(&got)
 	if err != nil {
@@ -198,7 +201,6 @@ func TestPatchTasksTaskId(t *testing.T) {
 		IsDeleted:   false,
 		Version:     2,
 	}
-
 	if got != expected {
 		t.Errorf("want %+v, but %+v", expected, got)
 	}
