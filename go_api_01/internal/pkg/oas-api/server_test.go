@@ -13,14 +13,6 @@ import (
 	"linnefromice/go_practice_webapp/go_api_01/internal/pkg/models"
 )
 
-func createInitialTaskList() models.TaskList {
-	taskList := models.NewTaskList()
-	taskList.AddTask("title 1", "description 1")
-	taskList.AddTask("title 2", "description 2")
-	taskList.AddTask("title 3", "description 3")
-	return *taskList
-}
-
 func TestGetTask(t *testing.T) {
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodGet, "/task", nil)
@@ -215,4 +207,12 @@ func TestPatchTasksTaskId(t *testing.T) {
 	if got != expected {
 		t.Errorf("want %+v, but %+v", expected, got)
 	}
+}
+
+func createInitialTaskList() models.TaskList {
+	taskList := models.NewTaskList()
+	taskList.AddTask("title 1", "description 1")
+	taskList.AddTask("title 2", "description 2")
+	taskList.AddTask("title 3", "description 3")
+	return *taskList
 }
