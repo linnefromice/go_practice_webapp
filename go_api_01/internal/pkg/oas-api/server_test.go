@@ -103,72 +103,111 @@ func TestPostTask(t *testing.T) {
 
 func TestDeleteTaskTaskId(t *testing.T) {
 	e := echo.New()
-	req := httptest.NewRequest(http.MethodDelete, "/task/1", nil)
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
+	method := http.MethodDelete
+	path := "/task/1"
 
-	h := OasServerImpl{
-		TaskList: createInitialTaskList(),
-	}
-	h.DeleteTaskTaskId(c, "2")
+	t.Run("normal", func(t *testing.T) {
+		req := httptest.NewRequest(method, path, nil)
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
 
-	// check status
-	assertStatus(t, rec.Code, http.StatusOK)
+		h := OasServerImpl{
+			TaskList: createInitialTaskList(),
+		}
+		h.DeleteTaskTaskId(c, "2")
 
-	// check response
-	var got models.Task
-	err := json.NewDecoder(rec.Body).Decode(&got)
-	if err != nil {
-		t.Fatal("Unable to parse response from server")
-	}
-	expected := models.Task{
-		Id:          2,
-		Title:       "title 2",
-		Description: "description 2",
-		IsFinished:  false,
-		IsDeleted:   true,
-		Version:     2,
-	}
+		// check status
+		assertStatus(t, rec.Code, http.StatusOK)
 
-	if !reflect.DeepEqual(got, expected) {
-		t.Errorf("want %+v, but %+v", expected, got)
-	}
+		// check response
+		var got models.Task
+		err := json.NewDecoder(rec.Body).Decode(&got)
+		if err != nil {
+			t.Fatal("Unable to parse response from server")
+		}
+		expected := models.Task{
+			Id:          2,
+			Title:       "title 2",
+			Description: "description 2",
+			IsFinished:  false,
+			IsDeleted:   true,
+			Version:     2,
+		}
+
+		if !reflect.DeepEqual(got, expected) {
+			t.Errorf("want %+v, but %+v", expected, got)
+		}
+	})
+
+	t.Run("wrong path parameter:taskId", func(t *testing.T) {
+		req := httptest.NewRequest(method, path, nil)
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+		h := OasServerImpl{
+			TaskList: *models.NewTaskList(),
+		}
+		h.DeleteTaskTaskId(c, "a")
+
+		// check status
+		t.Log(rec.Code)
+		assertStatus(t, rec.Code, http.StatusBadRequest)
+	})
 }
 
 func TestGetTasksTaskId(t *testing.T) {
 	e := echo.New()
-	req := httptest.NewRequest(http.MethodGet, "/task/1", nil)
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
+	method := http.MethodGet
+	path := "/task/1"
 
-	h := OasServerImpl{
-		TaskList: createInitialTaskList(),
-	}
-	h.GetTasksTaskId(c, "3")
+	t.Run("normal", func(t *testing.T) {
+		req := httptest.NewRequest(method, path, nil)
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+		h := OasServerImpl{
+			TaskList: createInitialTaskList(),
+		}
+		h.GetTasksTaskId(c, "3")
 
-	// check status
-	assertStatus(t, rec.Code, http.StatusOK)
+		// check status
+		assertStatus(t, rec.Code, http.StatusOK)
 
-	// check response
-	var got Task
-	err := json.NewDecoder(rec.Body).Decode(&got)
-	if err != nil {
-		t.Fatal("Unable to parse response from server")
-	}
-	expected := Task{
-		Id:          3,
-		Title:       "title 3",
-		Description: "description 3",
-		IsFinished:  false,
-		IsDeleted:   false,
-		Version:     1,
-	}
+		// check response
+		var got Task
+		err := json.NewDecoder(rec.Body).Decode(&got)
+		if err != nil {
+			t.Fatal("Unable to parse response from server")
+		}
+		expected := Task{
+			Id:          3,
+			Title:       "title 3",
+			Description: "description 3",
+			IsFinished:  false,
+			IsDeleted:   false,
+			Version:     1,
+		}
 
-	if !reflect.DeepEqual(got, expected) {
-		t.Errorf("want %+v, but %+v", expected, got)
-	}
+		if !reflect.DeepEqual(got, expected) {
+			t.Errorf("want %+v, but %+v", expected, got)
+		}
+	})
+
+	t.Run("wrong path parameter:taskId", func(t *testing.T) {
+		req := httptest.NewRequest(method, path, nil)
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+		h := OasServerImpl{
+			TaskList: *models.NewTaskList(),
+		}
+		h.GetTasksTaskId(c, "a")
+
+		// check status
+		t.Log(rec.Code)
+		assertStatus(t, rec.Code, http.StatusBadRequest)
+	})
 }
 
 func TestPatchTasksTaskId(t *testing.T) {
