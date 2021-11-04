@@ -38,13 +38,21 @@ func (s OasServerImpl) PostTask(ctx echo.Context) error {
 }
 
 func (s OasServerImpl) DeleteTaskTaskId(ctx echo.Context, taskId string) error {
-	id, _ := strconv.Atoi(taskId)
+	id, err := strconv.Atoi(taskId)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, "error occured when parse taskId because taskId is not positive number")
+	}
+
 	task := s.TaskList.DeleteTask(id)
 	return ctx.JSON(http.StatusOK, task)
 }
 
 func (s OasServerImpl) GetTasksTaskId(ctx echo.Context, taskId string) error {
-	id, _ := strconv.Atoi(taskId)
+	id, err := strconv.Atoi(taskId)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, "error occured when parse taskId because taskId is not positive number")
+	}
+
 	task, _ := s.TaskList.GetTask(id)
 	return ctx.JSON(http.StatusOK, task)
 }
