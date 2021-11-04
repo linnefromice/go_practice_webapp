@@ -13,6 +13,14 @@ import (
 	"linnefromice/go_practice_webapp/go_api_01/internal/pkg/models"
 )
 
+func createInitialTaskList() models.TaskList {
+	taskList := models.NewTaskList()
+	taskList.AddTask("title 1", "description 1")
+	taskList.AddTask("title 2", "description 2")
+	taskList.AddTask("title 3", "description 3")
+	return *taskList
+}
+
 func TestGetTask(t *testing.T) {
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodGet, "/task", nil)
@@ -20,13 +28,8 @@ func TestGetTask(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	taskList := models.NewTaskList()
-	taskList.AddTask("title 1", "description 1")
-	taskList.AddTask("title 2", "description 2")
-	taskList.AddTask("title 3", "description 3")
-
 	h := OasServerImpl{
-		TaskList: *taskList,
+		TaskList: createInitialTaskList(),
 	}
 
 	h.GetTask(c)
@@ -80,13 +83,8 @@ func TestPostTask(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	taskList := models.NewTaskList()
-	taskList.AddTask("title 1", "description 1")
-	taskList.AddTask("title 2", "description 2")
-	taskList.AddTask("title 3", "description 3")
-
 	h := OasServerImpl{
-		TaskList: *taskList,
+		TaskList: createInitialTaskList(),
 	}
 
 	h.PostTask(c)
@@ -120,13 +118,8 @@ func TestDeleteTaskTaskId(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	taskList := models.NewTaskList()
-	taskList.AddTask("title 1", "description 1")
-	taskList.AddTask("title 2", "description 2")
-	taskList.AddTask("title 3", "description 3")
-
 	h := OasServerImpl{
-		TaskList: *taskList,
+		TaskList: createInitialTaskList(),
 	}
 
 	h.DeleteTaskTaskId(c, "2")
@@ -160,13 +153,8 @@ func TestGetTasksTaskId(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	taskList := models.NewTaskList()
-	taskList.AddTask("title 1", "description 1")
-	taskList.AddTask("title 2", "description 2")
-	taskList.AddTask("title 3", "description 3")
-
 	h := OasServerImpl{
-		TaskList: *taskList,
+		TaskList: createInitialTaskList(),
 	}
 
 	h.GetTasksTaskId(c, "3")
@@ -201,13 +189,8 @@ func TestPatchTasksTaskId(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	taskList := models.NewTaskList()
-	taskList.AddTask("title 1", "description 1")
-	taskList.AddTask("title 2", "description 2")
-	taskList.AddTask("title 3", "description 3")
-
 	h := OasServerImpl{
-		TaskList: *taskList,
+		TaskList: createInitialTaskList(),
 	}
 
 	h.PatchTasksTaskId(c, "2")
