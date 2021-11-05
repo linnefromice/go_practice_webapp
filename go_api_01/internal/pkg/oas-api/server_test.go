@@ -237,43 +237,47 @@ func TestGetTasksTaskId(t *testing.T) {
 		// check status
 		t.Log(rec.Code)
 		assertStatus(t, rec.Code, http.StatusNotFound)
-
 	})
 }
 
 func TestPatchTasksTaskId(t *testing.T) {
 	e := echo.New()
-	userJSON := `{"title":"title updated","description":"description updated"}`
-	req := httptest.NewRequest(http.MethodPost, "/task/1", strings.NewReader(userJSON))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
+	method := http.MethodPost
+	path := "/task/1"
 
-	h := OasServerImpl{
-		TaskList: createInitialTaskList(),
-	}
-	h.PatchTasksTaskId(c, "2")
+	t.Run("normal", func(t *testing.T) {
+		userJSON := `{"title":"title updated","description":"description updated"}`
+		req := httptest.NewRequest(method, path, strings.NewReader(userJSON))
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
 
-	// check status
-	assertStatus(t, rec.Code, http.StatusOK)
+		h := OasServerImpl{
+			TaskList: createInitialTaskList(),
+		}
+		h.PatchTasksTaskId(c, "2")
 
-	// check response
-	var got models.Task
-	err := json.NewDecoder(rec.Body).Decode(&got)
-	if err != nil {
-		t.Fatal("Unable to parse response from server")
-	}
-	expected := models.Task{
-		Id:          2,
-		Title:       "title updated",
-		Description: "description updated",
-		IsFinished:  false,
-		IsDeleted:   false,
-		Version:     2,
-	}
-	if got != expected {
-		t.Errorf("want %+v, but %+v", expected, got)
-	}
+		// check status
+		assertStatus(t, rec.Code, http.StatusOK)
+
+		// check response
+		var got models.Task
+		err := json.NewDecoder(rec.Body).Decode(&got)
+		if err != nil {
+			t.Fatal("Unable to parse response from server")
+		}
+		expected := models.Task{
+			Id:          2,
+			Title:       "title updated",
+			Description: "description updated",
+			IsFinished:  false,
+			IsDeleted:   false,
+			Version:     2,
+		}
+		if got != expected {
+			t.Errorf("want %+v, but %+v", expected, got)
+		}
+	})
 }
 
 func createInitialTaskList() models.TaskList {
