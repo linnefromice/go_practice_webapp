@@ -208,6 +208,37 @@ func TestGetTasksTaskId(t *testing.T) {
 		t.Log(rec.Code)
 		assertStatus(t, rec.Code, http.StatusBadRequest)
 	})
+
+	t.Run("not found data - no data", func(t *testing.T) {
+		req := httptest.NewRequest(method, path, nil)
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+		h := OasServerImpl{
+			TaskList: *models.NewTaskList(),
+		}
+		h.GetTasksTaskId(c, "1")
+
+		// check status
+		t.Log(rec.Code)
+		assertStatus(t, rec.Code, http.StatusNotFound)
+	})
+
+	t.Run("not found data - no task specified number", func(t *testing.T) {
+		req := httptest.NewRequest(method, path, nil)
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+		h := OasServerImpl{
+			TaskList: createInitialTaskList(),
+		}
+		h.GetTasksTaskId(c, "4")
+
+		// check status
+		t.Log(rec.Code)
+		assertStatus(t, rec.Code, http.StatusNotFound)
+
+	})
 }
 
 func TestPatchTasksTaskId(t *testing.T) {
