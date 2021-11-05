@@ -61,11 +61,16 @@ func (s OasServerImpl) GetTasksTaskId(ctx echo.Context, taskId string) error {
 }
 
 func (s OasServerImpl) PatchTasksTaskId(ctx echo.Context, taskId string) error {
+	id, err := strconv.Atoi(taskId)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, "error occured when parse taskId because taskId is not positive number")
+	}
+
 	reqBody := new(PatchTasksTaskIdJSONBody)
 	if err := ctx.Bind(reqBody); err != nil {
 		return ctx.JSON(http.StatusInternalServerError, nil)
 	}
-	id, _ := strconv.Atoi(taskId)
+
 	task := s.TaskList.UpdateTask(id, *reqBody.Title, *reqBody.Description)
 	return ctx.JSON(http.StatusOK, task)
 }
