@@ -278,6 +278,21 @@ func TestPatchTasksTaskId(t *testing.T) {
 			t.Errorf("want %+v, but %+v", expected, got)
 		}
 	})
+
+	t.Run("wrong path parameter:taskId", func(t *testing.T) {
+		req := httptest.NewRequest(method, path, nil)
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+		h := OasServerImpl{
+			TaskList: *models.NewTaskList(),
+		}
+		h.PatchTasksTaskId(c, "a")
+
+		// check status
+		t.Log(rec.Code)
+		assertStatus(t, rec.Code, http.StatusBadRequest)
+	})
 }
 
 func createInitialTaskList() models.TaskList {
