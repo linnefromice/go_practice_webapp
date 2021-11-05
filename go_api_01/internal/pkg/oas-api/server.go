@@ -53,7 +53,10 @@ func (s OasServerImpl) GetTasksTaskId(ctx echo.Context, taskId string) error {
 		return ctx.JSON(http.StatusBadRequest, "error occured when parse taskId because taskId is not positive number")
 	}
 
-	task, _ := s.TaskList.GetTask(id)
+	task, err := s.TaskList.GetTask(id)
+	if err != nil {
+		return ctx.JSON(http.StatusNotFound, err.Error())
+	}
 	return ctx.JSON(http.StatusOK, task)
 }
 
