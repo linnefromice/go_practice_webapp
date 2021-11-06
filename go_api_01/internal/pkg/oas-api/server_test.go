@@ -67,38 +67,59 @@ func TestGetTask(t *testing.T) {
 
 func TestPostTask(t *testing.T) {
 	e := echo.New()
+	method := http.MethodPost
+	path := "/task"
 
-	userJSON := `{"title":"title 4","description":"description 4"}`
-	req := httptest.NewRequest(http.MethodPost, "/task", strings.NewReader(userJSON))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
+	t.Run("normal", func(t *testing.T) {
+		userJSON := `{"title":"title 4","description":"description 4"}`
+		req := httptest.NewRequest(method, path, strings.NewReader(userJSON))
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
 
-	h := OasServerImpl{
-		TaskList: createInitialTaskList(),
-	}
-	h.PostTask(c)
+		h := OasServerImpl{
+			TaskList: createInitialTaskList(),
+		}
+		h.PostTask(c)
 
-	// check status
-	assertStatus(t, rec.Code, http.StatusOK)
+		// check status
+		assertStatus(t, rec.Code, http.StatusOK)
 
-	// check response
-	var got models.Task
-	err := json.NewDecoder(rec.Body).Decode(&got)
-	if err != nil {
-		t.Fatal("Unable to parse response from server")
-	}
-	expected := models.Task{
-		Id:          4,
-		Title:       "title 4",
-		Description: "description 4",
-		IsFinished:  false,
-		IsDeleted:   false,
-		Version:     1,
-	}
-	if !reflect.DeepEqual(got, expected) {
-		t.Errorf("want %+v, but %+v", expected, got)
-	}
+		// check response
+		var got models.Task
+		err := json.NewDecoder(rec.Body).Decode(&got)
+		if err != nil {
+			t.Fatal("Unable to parse response from server")
+		}
+		expected := models.Task{
+			Id:          4,
+			Title:       "title 4",
+			Description: "description 4",
+			IsFinished:  false,
+			IsDeleted:   false,
+			Version:     1,
+		}
+		if !reflect.DeepEqual(got, expected) {
+			t.Errorf("want %+v, but %+v", expected, got)
+		}
+	})
+
+	t.Run("wrong request body", func(t *testing.T) {
+		userJSON := "1"
+		req := httptest.NewRequest(method, path, strings.NewReader(userJSON))
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+
+		h := OasServerImpl{
+			TaskList: *models.NewTaskList(),
+		}
+		h.PostTask(c)
+
+		// check status
+		t.Log(rec.Code)
+		assertStatus(t, rec.Code, http.StatusBadRequest)
+	})
 }
 
 func TestDeleteTaskTaskId(t *testing.T) {
@@ -288,6 +309,22 @@ func TestPatchTasksTaskId(t *testing.T) {
 			TaskList: *models.NewTaskList(),
 		}
 		h.PatchTasksTaskId(c, "a")
+
+		// check status
+		t.Log(rec.Code)
+		assertStatus(t, rec.Code, http.StatusBadRequest)
+	})
+
+	t.Run("wrong request body", func(t *testing.T) {
+		userJSON := "1"
+		req := httptest.NewRequest(method, path, strings.NewReader(userJSON))
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+		h := OasServerImpl{
+			TaskList: *models.NewTaskList(),
+		}
+		h.PatchTasksTaskId(c, "1")
 
 		// check status
 		t.Log(rec.Code)
