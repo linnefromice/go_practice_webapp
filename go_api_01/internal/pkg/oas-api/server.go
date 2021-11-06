@@ -31,7 +31,7 @@ func (s OasServerImpl) GetTask(ctx echo.Context) error {
 func (s OasServerImpl) PostTask(ctx echo.Context) error {
 	reqBody := new(PostTaskJSONBody)
 	if err := ctx.Bind(reqBody); err != nil {
-		return ctx.JSON(http.StatusInternalServerError, nil)
+		return ctx.JSON(http.StatusBadRequest, "not the correct request body")
 	}
 	task := s.TaskList.AddTask(*reqBody.Title, *reqBody.Description)
 	return ctx.JSON(http.StatusOK, task)
@@ -68,7 +68,7 @@ func (s OasServerImpl) PatchTasksTaskId(ctx echo.Context, taskId string) error {
 
 	reqBody := new(PatchTasksTaskIdJSONBody)
 	if err := ctx.Bind(reqBody); err != nil {
-		return ctx.JSON(http.StatusInternalServerError, nil)
+		return ctx.JSON(http.StatusBadRequest, "not the correct request body")
 	}
 
 	task := s.TaskList.UpdateTask(id, *reqBody.Title, *reqBody.Description)
