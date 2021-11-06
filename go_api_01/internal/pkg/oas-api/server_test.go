@@ -118,6 +118,14 @@ func TestPostTask(t *testing.T) {
 
 		// check status
 		assertStatus(t, rec.Code, http.StatusBadRequest)
+
+		// check error message
+		var got string
+		err := json.NewDecoder(rec.Body).Decode(&got)
+		if err != nil {
+			t.Fatal("Unable to parse response from server")
+		}
+		assertMessage(t, got, "not the correct request body")
 	})
 }
 
@@ -172,6 +180,14 @@ func TestDeleteTaskTaskId(t *testing.T) {
 
 		// check status
 		assertStatus(t, rec.Code, http.StatusBadRequest)
+
+		// check error message
+		var got string
+		err := json.NewDecoder(rec.Body).Decode(&got)
+		if err != nil {
+			t.Fatal("Unable to parse response from server")
+		}
+		assertMessage(t, got, "error occured when parse taskId because taskId is not positive number")
 	})
 }
 
@@ -225,6 +241,14 @@ func TestGetTasksTaskId(t *testing.T) {
 
 		// check status
 		assertStatus(t, rec.Code, http.StatusBadRequest)
+
+		// check error message
+		var got string
+		err := json.NewDecoder(rec.Body).Decode(&got)
+		if err != nil {
+			t.Fatal("Unable to parse response from server")
+		}
+		assertMessage(t, got, "error occured when parse taskId because taskId is not positive number")
 	})
 
 	t.Run("not found data - no data", func(t *testing.T) {
@@ -307,6 +331,14 @@ func TestPatchTasksTaskId(t *testing.T) {
 
 		// check status
 		assertStatus(t, rec.Code, http.StatusBadRequest)
+
+		// check error message
+		var got string
+		err := json.NewDecoder(rec.Body).Decode(&got)
+		if err != nil {
+			t.Fatal("Unable to parse response from server")
+		}
+		assertMessage(t, got, "error occured when parse taskId because taskId is not positive number")
 	})
 
 	t.Run("wrong request body", func(t *testing.T) {
@@ -322,6 +354,14 @@ func TestPatchTasksTaskId(t *testing.T) {
 
 		// check status
 		assertStatus(t, rec.Code, http.StatusBadRequest)
+
+		// check error message
+		var got string
+		err := json.NewDecoder(rec.Body).Decode(&got)
+		if err != nil {
+			t.Fatal("Unable to parse response from server")
+		}
+		assertMessage(t, got, "not the correct request body")
 	})
 }
 
@@ -337,5 +377,12 @@ func assertStatus(t *testing.T, got, want int) {
 	t.Helper()
 	if got != want {
 		t.Errorf("did not get correct status, got %d, want %d", got, want)
+	}
+}
+
+func assertMessage(t *testing.T, got, want string) {
+	t.Helper()
+	if got != want {
+		t.Errorf("did not get correct message, got %s, want %s", got, want)
 	}
 }
