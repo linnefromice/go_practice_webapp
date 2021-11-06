@@ -8,6 +8,11 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+const (
+	ErrMsgTaskIdPathParameter = "error occured when parse taskId because taskId is not positive number"
+	ErrMsgWrongRequestBody    = "not the correct request body"
+)
+
 type OasServerImpl struct {
 	TaskList models.TaskList
 }
@@ -31,30 +36,46 @@ func (s OasServerImpl) GetTask(ctx echo.Context) error {
 func (s OasServerImpl) PostTask(ctx echo.Context) error {
 	reqBody := new(PostTaskJSONBody)
 	if err := ctx.Bind(reqBody); err != nil {
-		return ctx.JSON(http.StatusInternalServerError, nil)
+		return ctx.JSON(http.StatusBadRequest, ErrMsgWrongRequestBody)
 	}
 	task := s.TaskList.AddTask(*reqBody.Title, *reqBody.Description)
 	return ctx.JSON(http.StatusOK, task)
 }
 
 func (s OasServerImpl) DeleteTaskTaskId(ctx echo.Context, taskId string) error {
-	id, _ := strconv.Atoi(taskId)
+	id, err := strconv.Atoi(taskId)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, ErrMsgTaskIdPathParameter)
+	}
+
 	task := s.TaskList.DeleteTask(id)
 	return ctx.JSON(http.StatusOK, task)
 }
 
 func (s OasServerImpl) GetTasksTaskId(ctx echo.Context, taskId string) error {
-	id, _ := strconv.Atoi(taskId)
-	task, _ := s.TaskList.GetTask(id)
+	id, err := strconv.Atoi(taskId)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, ErrMsgTaskIdPathParameter)
+	}
+
+	task, err := s.TaskList.GetTask(id)
+	if err != nil {
+		return ctx.JSON(http.StatusNotFound, err.Error())
+	}
 	return ctx.JSON(http.StatusOK, task)
 }
 
 func (s OasServerImpl) PatchTasksTaskId(ctx echo.Context, taskId string) error {
+	id, err := strconv.Atoi(taskId)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, ErrMsgTaskIdPathParameter)
+	}
+
 	reqBody := new(PatchTasksTaskIdJSONBody)
 	if err := ctx.Bind(reqBody); err != nil {
-		return ctx.JSON(http.StatusInternalServerError, nil)
+		return ctx.JSON(http.StatusBadRequest, ErrMsgWrongRequestBody)
 	}
-	id, _ := strconv.Atoi(taskId)
+
 	task := s.TaskList.UpdateTask(id, *reqBody.Title, *reqBody.Description)
 	return ctx.JSON(http.StatusOK, task)
 }
