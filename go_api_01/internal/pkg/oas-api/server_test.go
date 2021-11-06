@@ -125,7 +125,7 @@ func TestPostTask(t *testing.T) {
 		if err != nil {
 			t.Fatal("Unable to parse response from server")
 		}
-		assertMessage(t, got, "not the correct request body")
+		assertMessage(t, got, ErrMsgWrongRequestBody)
 	})
 }
 
@@ -187,7 +187,7 @@ func TestDeleteTaskTaskId(t *testing.T) {
 		if err != nil {
 			t.Fatal("Unable to parse response from server")
 		}
-		assertMessage(t, got, "error occured when parse taskId because taskId is not positive number")
+		assertMessage(t, got, ErrMsgTaskIdPathParameter)
 	})
 }
 
@@ -248,7 +248,7 @@ func TestGetTasksTaskId(t *testing.T) {
 		if err != nil {
 			t.Fatal("Unable to parse response from server")
 		}
-		assertMessage(t, got, "error occured when parse taskId because taskId is not positive number")
+		assertMessage(t, got, ErrMsgTaskIdPathParameter)
 	})
 
 	t.Run("not found data - no data", func(t *testing.T) {
@@ -338,7 +338,7 @@ func TestPatchTasksTaskId(t *testing.T) {
 		if err != nil {
 			t.Fatal("Unable to parse response from server")
 		}
-		assertMessage(t, got, "error occured when parse taskId because taskId is not positive number")
+		assertMessage(t, got, ErrMsgTaskIdPathParameter)
 	})
 
 	t.Run("wrong request body", func(t *testing.T) {
@@ -361,7 +361,7 @@ func TestPatchTasksTaskId(t *testing.T) {
 		if err != nil {
 			t.Fatal("Unable to parse response from server")
 		}
-		assertMessage(t, got, "not the correct request body")
+		assertMessage(t, got, ErrMsgWrongRequestBody)
 	})
 }
 
