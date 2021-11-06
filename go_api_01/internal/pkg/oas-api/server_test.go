@@ -117,7 +117,6 @@ func TestPostTask(t *testing.T) {
 		h.PostTask(c)
 
 		// check status
-		t.Log(rec.Code)
 		assertStatus(t, rec.Code, http.StatusBadRequest)
 	})
 }
@@ -172,7 +171,6 @@ func TestDeleteTaskTaskId(t *testing.T) {
 		h.DeleteTaskTaskId(c, "a")
 
 		// check status
-		t.Log(rec.Code)
 		assertStatus(t, rec.Code, http.StatusBadRequest)
 	})
 }
@@ -226,7 +224,6 @@ func TestGetTasksTaskId(t *testing.T) {
 		h.GetTasksTaskId(c, "a")
 
 		// check status
-		t.Log(rec.Code)
 		assertStatus(t, rec.Code, http.StatusBadRequest)
 	})
 
@@ -241,7 +238,6 @@ func TestGetTasksTaskId(t *testing.T) {
 		h.GetTasksTaskId(c, "1")
 
 		// check status
-		t.Log(rec.Code)
 		assertStatus(t, rec.Code, http.StatusNotFound)
 	})
 
@@ -256,7 +252,6 @@ func TestGetTasksTaskId(t *testing.T) {
 		h.GetTasksTaskId(c, "4")
 
 		// check status
-		t.Log(rec.Code)
 		assertStatus(t, rec.Code, http.StatusNotFound)
 	})
 }
@@ -311,7 +306,6 @@ func TestPatchTasksTaskId(t *testing.T) {
 		h.PatchTasksTaskId(c, "a")
 
 		// check status
-		t.Log(rec.Code)
 		assertStatus(t, rec.Code, http.StatusBadRequest)
 	})
 
@@ -327,7 +321,6 @@ func TestPatchTasksTaskId(t *testing.T) {
 		h.PatchTasksTaskId(c, "1")
 
 		// check status
-		t.Log(rec.Code)
 		assertStatus(t, rec.Code, http.StatusBadRequest)
 	})
 }
